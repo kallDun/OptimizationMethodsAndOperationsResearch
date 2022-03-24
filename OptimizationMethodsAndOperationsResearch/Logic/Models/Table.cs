@@ -6,13 +6,14 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
 {
     public class Table : ICloneable
     {
-        public Table(int columns, int rows, Fraction[][] matrix, Basis[] columnBasises, Basis[] rowsBasises)
+        public Table(int rows, int columns, Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises, Fraction[] bigNumRow)
         {
-            Columns = columns;
             Rows = rows;
+            Columns = columns;
             Matrix = matrix;
             ColumnBasises = columnBasises;
-            RowsBasises = rowsBasises;
+            RowBasises = rowBasises;
+            BigNumRow = bigNumRow;
         }
         public Fraction this[int i, int j]
         {
@@ -23,11 +24,13 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
         public int Rows { get; private set; }
         public Fraction[][] Matrix { get; private set; }
         public Basis[] ColumnBasises { get; private set; }
-        public Basis[] RowsBasises { get; private set; }
+        public Basis[] RowBasises { get; private set; }
+        public Fraction[] BigNumRow { get; private set; }
 
         public object Clone() => new Table(Columns, Rows,
-            Matrix.Select(x => x.Clone() as Fraction[]).ToArray(),
+            Matrix.Select(x => x.ToArray()).ToArray(),
             ColumnBasises.Select(x => x.Clone() as Basis).ToArray(),
-            RowsBasises.Select(x => x.Clone() as Basis).ToArray());
+            RowBasises.Select(x => x.Clone() as Basis).ToArray(),
+            BigNumRow.ToArray());
     }
 }

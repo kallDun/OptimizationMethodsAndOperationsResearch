@@ -7,7 +7,16 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TablePage">
-
+    <Page.Resources>
+        <Style TargetType="TextBox" x:Key="TextBoxTableStyle">
+            <Setter Property="FontFamily" Value="DejaVu Sans"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Page.Resources>
     <Grid x:Name="MainGrid">
         <Grid Margin="80 40" x:Name="TableGrid"/>
     </Grid>
