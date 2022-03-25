@@ -1,5 +1,6 @@
 ﻿using Fractions;
 using OptimizationMethodsAndOperationsResearch.Logic.Models;
+using OptimizationMethodsAndOperationsResearch.Logic.Services;
 using OptimizationMethodsAndOperationsResearch.Views;
 using System;
 using System.Collections.Generic;
@@ -22,53 +23,47 @@ namespace OptimizationMethodsAndOperationsResearch
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<Page> pages = new List<Page>();
+        int page_index = 0;
+
         public MainWindow()
         {
             InitializeComponent();
-            var page = new TablePage(GetTable());
-            PageFrame.NavigationService.RemoveBackEntry();
-            PageFrame.Content = page;
+            var start_page = new StartPage();
+            PageFrame.Content = start_page;
+            start_page.SolveButton.Click += (s, e) => CalculateClick(start_page);
         }
 
-        private Table GetTable()
+        private void CalculateClick(StartPage page)
         {
-            Fraction[][] matrix =
+            var (func, matrix) = page.GetFunctionData;
+            var curr_table = new FunctionParser().ToTable(func, matrix);
+            pages.Add(new TablePage(curr_table));
+            var simplex_calculator = new SimplexMethodCalculator();
+            while (simplex_calculator.IsOptimizated(curr_table))
             {
-                new Fraction[]
-                {
-                    new Fraction(2), new Fraction(5, 3), new Fraction(0), new Fraction(1), new Fraction(1, 3), new Fraction(0),
-                },
-                new Fraction[]
-                {
-                    new Fraction(1), new Fraction(-1, 3), new Fraction(1), new Fraction(0), new Fraction(1, 3), new Fraction(0),
-                },
-                new Fraction[]
-                {
-                    new Fraction(8, 3), new Fraction(5, 3), new Fraction(0), new Fraction(0), new Fraction(-2, 3), new Fraction(1),
-                },
-                new Fraction[]
-                {
-                    new Fraction(3), new Fraction(-13, 3), new Fraction(0), new Fraction(0), new Fraction(-2, 3), new Fraction(0),
-                },
-            };
-            Basis P1 = new Basis(1, new Fraction(5));
-            Basis P2 = new Basis(2, new Fraction(-2));
-            Basis P3 = new Basis(3, new Fraction(0));
-            Basis P4 = new Basis(4, new Fraction(0));
-            Basis P5 = new Basis(5, new Fraction(0));
-            Basis[] column_basis =
-            {
-                P1, P2, P3, P4, P5
-            };
-            Basis[] row_basis =
-            {
-                P3, P4, P5
-            };
-            Fraction[] big_num_row = new Fraction[]
-            {
-                new Fraction(0), new Fraction(0), new Fraction(0), new Fraction(0), new Fraction(0), new Fraction(0)
-            };
-            return new Table(4, 6, matrix, column_basis, row_basis, big_num_row);
+                curr_table = simplex_calculator.GetNextTable(curr_table);
+                pages.Add(new TablePage(curr_table));
+            }
+            var results = simplex_calculator.GetResults(curr_table);
+            page.OutputTextBox.Text = string.Join("  ", results.Select(x => $"x{x.Key} = {x.Value}"));
+            ToLeftButton.IsEnabled = true;
+            ToRightButton.IsEnabled = true;
+        }
+
+        private void RightButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageFrame.NavigationService.RemoveBackEntry();
+            if (page_index == pages.Count - 1) page_index = 0;
+            else page_index++;
+            PageFrame.Content = pages[page_index];
+        }
+        private void LeftButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageFrame.NavigationService.RemoveBackEntry();
+            if (page_index == 0) page_index = pages.Count - 1;
+            else page_index--;
+            PageFrame.Content = pages[page_index];
         }
     }
 }
