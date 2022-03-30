@@ -17,12 +17,13 @@ namespace OptimizationMethodsAndOperationsResearch.Views
         }
         private void InitializeTable(Table table)
         {
-            int rows = 4 + table.RowBasises.Length;
+            int rows = 4 + table.ColumnBasises.Length;
+            int cols = 4 + table.RowBasises.Length;
+
             for (int i = 0; i < rows; i++)
             {
                 TableGrid.RowDefinitions.Add(new RowDefinition());
             }
-            int cols = 4 + table.ColumnBasises.Length;
             for (int i = 0; i < cols; i++)
             {
                 TableGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -66,13 +67,13 @@ namespace OptimizationMethodsAndOperationsResearch.Views
             }
             for (int i = 2; i < rows - 2; i++)
             {
-                var basis = table.RowBasises[i - 2];
+                var basis = table.ColumnBasises[i - 2];
                 text_boxes[i][1].Text = $"P{GetSmallNumber(basis.Index)}";
                 text_boxes[i][2].Text = basis.Value.ToString();
             }
             for (int j = 4; j < cols; j++)
             {
-                var basis = table.ColumnBasises[j - 4];
+                var basis = table.RowBasises[j - 4];
                 text_boxes[0][j].Text = basis.Value.ToString();
                 text_boxes[1][j].Text = $"P{GetSmallNumber(basis.Index)}";
             }

@@ -39,14 +39,14 @@ namespace OptimizationMethodsAndOperationsResearch
             var (func, matrix) = page.GetFunctionData;
             var curr_table = new FunctionParser().ToTable(func, matrix);
             pages.Add(new TablePage(curr_table));
-            var simplex_calculator = new SimplexMethodCalculator();
+            /*var simplex_calculator = new SimplexMethodCalculator();
             while (simplex_calculator.IsOptimizated(curr_table))
             {
                 curr_table = simplex_calculator.GetNextTable(curr_table);
                 pages.Add(new TablePage(curr_table));
             }
             var results = simplex_calculator.GetResults(curr_table);
-            page.OutputTextBox.Text = string.Join("  ", results.Select(x => $"x{x.Key} = {x.Value}"));
+            page.OutputTextBox.Text = string.Join("  ", results.Select(x => $"x{x.Key} = {x.Value}"));*/
             ToLeftButton.IsEnabled = true;
             ToRightButton.IsEnabled = true;
         }
