@@ -26,6 +26,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
         public Basis[] ColumnBasises { get; private set; }
         public Basis[] RowBasises { get; private set; }
         public Fraction[] BigNumRow { get; private set; }
+        public bool IsMin { get; private set; }
 
         public object Clone() => new Table(Columns, Rows,
             Matrix.Select(x => x.ToArray()).ToArray(),
