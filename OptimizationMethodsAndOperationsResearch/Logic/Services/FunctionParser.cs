@@ -79,14 +79,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                     }
                 }
             }
-
-            SumValue[] lastRow = new SumValue[matrix[0].Length];
-            lastRow[0] = SimplexMethodCalculator.CalculateFunction(matrix, columnBasises.ToArray(), rowBasises);
-            for (int i = 1; i < matrix[0].Length; i++)
-            {
-                lastRow[i] = SimplexMethodCalculator.CalculateDelta(i, matrix, columnBasises, rowBasises);
-            }
-            return new Table(matrix, columnBasises, rowBasises, lastRow, if_min, has_big_num);
+            return new Table(matrix, columnBasises, rowBasises, SimplexMethodCalculator.GenerateLastRow(matrix, columnBasises, rowBasises), if_min, has_big_num);
         }
         private Fraction GetSimpleBasisResult(Fraction[][] matrix, int index)
         {

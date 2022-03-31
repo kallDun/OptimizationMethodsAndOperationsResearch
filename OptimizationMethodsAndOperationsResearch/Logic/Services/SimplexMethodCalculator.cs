@@ -139,7 +139,16 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             return index;
         }
 
-
+        public static SumValue[] GenerateLastRow(Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
+        {
+            SumValue[] lastRow = new SumValue[matrix[0].Length];
+            lastRow[0] = CalculateFunction(matrix, columnBasises.ToArray(), rowBasises);
+            for (int i = 1; i < matrix[0].Length; i++)
+            {
+                lastRow[i] = CalculateDelta(i, matrix, columnBasises, rowBasises);
+            }
+            return lastRow;
+        }
         public static SumValue CalculateFunction(Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
         {
             var num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueNumber * matrix[i][0]));
