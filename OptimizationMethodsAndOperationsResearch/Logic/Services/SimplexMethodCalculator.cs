@@ -39,14 +39,14 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             }
             for (int i = 0; i < table.ColumnBasises.Length; i++)
             {
-                if (table.ColumnBasises[i].IsHugeNumber && table.Matrix[0][i].IsNegative)
+                if (table.ColumnBasises[i].SumValue.HasBigNum && table.Matrix[0][i].IsNegative)
                 {
                     return false;
                 }
             }
             return true;
         }
-
+        
         public Table GetNextTable(Table table)
         {
             int indexOfInputingVector = GetIndexOfInputingVector(table);
@@ -90,7 +90,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             {
                 if (table.ColumnBasises.Select(elem => elem.Index).ToArray().Contains(i))
                 {
-                    results.Add(i, table.RowBasises[i].Value);
+                    results.Add(i, table.RowBasises[i].SumValue.ValueNumber);
                 }
                 else
                 {
@@ -139,5 +139,27 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             return index;
         }
 
+
+        public static SumValue CalculateFunction(Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
+        {
+            var num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueNumber * matrix[i][0]));
+            var m_num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueM * matrix[i][0]));
+            return new SumValue(num, m_num);
+        }
+        public static SumValue CalculateDelta(int j, Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
+        {
+            var num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueNumber * matrix[i][j])) - rowBasises[j - 1].SumValue.ValueNumber;
+            var m_num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueM * matrix[i][j])) - rowBasises[j - 1].SumValue.ValueM;
+            return new SumValue(num, m_num);
+        }
+        private static Fraction GetFractionSum(IEnumerable<Fraction> enumerable)
+        {
+            Fraction sum = 0;
+            foreach (var item in enumerable)
+            {
+                sum += item;
+            }
+            return sum;
+        }
     }
 }

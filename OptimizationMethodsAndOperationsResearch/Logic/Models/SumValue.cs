@@ -1,24 +1,29 @@
 ﻿using Fractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OptimizationMethodsAndOperationsResearch.Logic.Models
 {
-    struct SumValue
+    public struct SumValue
     {
+        public Fraction ValueNumber { get; set; }
+        public Fraction ValueM { get; set; }
+        public bool HasBigNum => ValueM != 0;
         public SumValue(Fraction value, Fraction value_m)
         {
             ValueNumber = value;
             ValueM = value_m;
         }
+        public override string ToString()
+        {
+            if (HasBigNum)
+            {
+                if (ValueM == 1) return "M";
+                else if (ValueM == -1) return "-M";
+                else return $"{ValueM}M";
+            }
+            else return ValueNumber.ToString();
+        }
 
-        public Fraction ValueNumber { get; set; }
-        public Fraction ValueM { get; set; }
-
-        public static SumValue operation +(SumValue a, SumValue b)
+        public static SumValue operator +(SumValue a, SumValue b)
         {
             return new SumValue(a.ValueNumber + b.ValueNumber, a.ValueM + b.ValueM);
         }

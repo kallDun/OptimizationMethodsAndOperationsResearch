@@ -17,7 +17,8 @@ namespace OptimizationMethodsAndOperationsResearch.Views
         }
         private void InitializeTable(Table table)
         {
-            int rows = 4 + table.ColumnBasises.Length;
+            int rows = 3 + table.ColumnBasises.Length;
+            if (table.HasBigNumbers) rows++;
             int cols = 4 + table.RowBasises.Length;
 
             for (int i = 0; i < rows; i++)
@@ -65,19 +66,21 @@ namespace OptimizationMethodsAndOperationsResearch.Views
             {
                 text_boxes[i][0].Text = $"{i - 1}";
             }
-            for (int i = 2; i < rows - 2; i++)
-            {
-                var basis = table.ColumnBasises[i - 2];
-                text_boxes[i][1].Text = $"P{GetSmallNumber(basis.Index)}";
-                text_boxes[i][2].Text = basis.Value.ToString();
-            }
             for (int j = 4; j < cols; j++)
             {
                 var basis = table.RowBasises[j - 4];
-                text_boxes[0][j].Text = basis.Value.ToString();
+                text_boxes[0][j].Text = basis.SumValue.ToString();
                 text_boxes[1][j].Text = $"P{GetSmallNumber(basis.Index)}";
             }
-            for (int i = 2; i < rows - 1; i++)
+
+            int cols_offset = table.HasBigNumbers ? 2 : 1;
+            for (int i = 2; i < rows - cols_offset; i++)
+            {
+                var basis = table.ColumnBasises[i - 2];
+                text_boxes[i][1].Text = $"P{GetSmallNumber(basis.Index)}";
+                text_boxes[i][2].Text = basis.SumValue.ToString();
+            }
+            for (int i = 2; i < rows - cols_offset; i++)
             {
                 for (int j = 3; j < cols; j++)
                 {
@@ -86,7 +89,8 @@ namespace OptimizationMethodsAndOperationsResearch.Views
             }
             for (int i = 3; i < cols; i++)
             {
-                text_boxes[rows - 1][i].Text = table.BigNumRow[i - 3].ToString();
+                text_boxes[rows - cols_offset][i].Text = table.LastRow[i - 3].ValueNumber.ToString();
+                if (table.HasBigNumbers) text_boxes[rows - 1][i].Text = table.LastRow[i - 3].ValueM.ToString();
             }
         }
         private char GetSmallNumber(int num)

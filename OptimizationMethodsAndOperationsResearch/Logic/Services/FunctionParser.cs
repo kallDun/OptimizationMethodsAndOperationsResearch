@@ -20,7 +20,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
         public Table ToTable(string function, string equations)
         {
             var function_parts = function.Split(new string[] { "=", "->" }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
-            bool if_func_max = function_parts[2] is "max";
+            bool if_func_min = function_parts[2] is "min";
 
             var arguments_parts = function_parts[1].Split(new string[] { "x1", "x2" }, StringSplitOptions.None).Select(x => x.Replace(" ", "")).ToArray();
             int x1 = GetIntFromString(arguments_parts[0]), x2 = GetIntFromString(arguments_parts[1]);
@@ -50,62 +50,49 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 X0[i] = GetSimpleBasisResult(main_matrix, i + 1);
             }
 
-            //MessageBox.Show(string.Join("\n", main_matrix.Select(x => string.Join("\t", x))));
-            //MessageBox.Show(string.Join("\t", X0));
-
-            return FormTableFromData(main_matrix, X0, C, if_func_max);
+            return FormTableFromData(main_matrix, X0, C, if_func_min);
         }
 
-        private Table FormTableFromData(Fraction[][] matrix, Fraction[] X0, Fraction[] C, bool if_func_max)
+        private Table FormTableFromData(Fraction[][] matrix, Fraction[] X0, Fraction[] C, bool if_min)
         {
+            bool has_big_num = false;
             Basis[] rowBasises = new Basis[matrix[0].Length - 1];
             for (int i = 0; i < rowBasises.Length; i++)
             {
-                rowBasises[i] = i + 1 < basic_row_count ? new Basis(i + 1, C[i]) : new Basis(i + 1, -1, true);
+                rowBasises[i] = i + 1 < basic_row_count ? new Basis(i + 1, new SumValue(C[i], 0)) : new Basis(i + 1, new SumValue(0, -1));
+                if (i + 1 >= basic_row_count) has_big_num = true;
             }
-            var columnBasises = new List<Basis>();
+            var temp_basises = new List<Basis>();
             foreach (var basis in rowBasises)
             {
-                if (IsSimpleBasis(matrix, basis.Index)) columnBasises.Add(basis);
+                if (IsSimpleBasis(matrix, basis.Index)) temp_basises.Add(basis);
+            }
+            var columnBasises = new Basis[temp_basises.Count()];
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < temp_basises.Count; j++)
+                {
+                    if (matrix[i][temp_basises[j].Index] == 1)
+                    {
+                        columnBasises[i] = temp_basises[j];
+                        break;
+                    }
+                }
             }
 
-            Fraction[][] new_matrix = new Fraction[matrix.Length + 1][];
-            for (int i = 0; i < matrix.Length; i++) new_matrix[i] = matrix[i];
-            new_matrix[new_matrix.Length - 1] = new Fraction[matrix[0].Length];
-            Fraction[] bigNumRow = new Fraction[matrix[0].Length];
-
-            new_matrix[new_matrix.Length - 1][0] = GetFractionSum(columnBasises.Select((x, i) => !x.IsHugeNumber ? x.Value * matrix[i][0] : 0));
-            bigNumRow[0] = GetFractionSum(columnBasises.Select((x, i) => x.IsHugeNumber ? x.Value * matrix[i][0] : 0));
+            SumValue[] lastRow = new SumValue[matrix[0].Length];
+            lastRow[0] = SimplexMethodCalculator.CalculateFunction(matrix, columnBasises.ToArray(), rowBasises);
             for (int i = 1; i < matrix[0].Length; i++)
             {
-                (new_matrix[new_matrix.Length - 1][i], bigNumRow[i]) = CalculateDelta(i, matrix, columnBasises.ToArray(), rowBasises);
+                lastRow[i] = SimplexMethodCalculator.CalculateDelta(i, matrix, columnBasises, rowBasises);
             }
-
-            return new Table(0, 0, new_matrix, columnBasises.ToArray(), rowBasises, bigNumRow);
+            return new Table(matrix, columnBasises, rowBasises, lastRow, if_min, has_big_num);
         }
-
-        private (Fraction, Fraction) CalculateDelta(int j, Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
-        {
-            var num = GetFractionSum(columnBasises.Select((x, i) => !x.IsHugeNumber ? x.Value * matrix[i][j] : 0)) - (!rowBasises[j - 1].IsHugeNumber ? rowBasises[j - 1].Value : 0);
-            var big_num = GetFractionSum(columnBasises.Select((x, i) => x.IsHugeNumber ? x.Value * matrix[i][j] : 0)) - (rowBasises[j - 1].IsHugeNumber ? rowBasises[j - 1].Value : 0);
-            return (num, big_num);
-        }
-
-        private Fraction GetFractionSum(IEnumerable<Fraction> enumerable)
-        {
-            Fraction sum = 0;
-            foreach (var item in enumerable)
-            {
-                sum += item;
-            }
-            return sum;
-        }
-
         private Fraction GetSimpleBasisResult(Fraction[][] matrix, int index)
         {
             var find_one = false;
             Fraction value = 0;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < matrix.Length; i++)
             {
                 var item = matrix[i][index];
                 if (item == 0) continue;
@@ -151,7 +138,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 if (col.IsLess) continue;
                 for (int j = 0; j < 3; j++)
                 {
-                    matrix[basic_row_count + counter][j] = i == j ? 1 : 0;
+                    matrix[j][basic_row_count + counter] = i == j ? 1 : 0;
                 }
                 counter++;
             }

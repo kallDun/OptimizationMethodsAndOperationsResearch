@@ -1,19 +1,17 @@
-﻿using Fractions;
-using System;
+﻿using System;
 
 namespace OptimizationMethodsAndOperationsResearch.Logic.Models
 {
     public class Basis : ICloneable
     {
-        public Basis(int index, SumValue value, bool isHugeNumber = false)
+        public Basis(int index, SumValue value)
         {
             Index = index;
-            Value = value;
-            IsHugeNumber = isHugeNumber;
+            SumValue = value;
         }
         public int Index { get; set; }
-        public SumValue Value { get; set; }
+        public SumValue SumValue { get; set; }
 
-        public object Clone() => new Basis(Index, Value, IsHugeNumber);
+        public object Clone() => new Basis(Index, SumValue);
     }
 }
