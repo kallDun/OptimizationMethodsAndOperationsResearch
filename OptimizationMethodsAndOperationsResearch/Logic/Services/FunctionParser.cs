@@ -100,6 +100,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             }
             return sum;
         }
+
         private Fraction GetSimpleBasisResult(Fraction[][] matrix, int index)
         {
             var find_one = false;

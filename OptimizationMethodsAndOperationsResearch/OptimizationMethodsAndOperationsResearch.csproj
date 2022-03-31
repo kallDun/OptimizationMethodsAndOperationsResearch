@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Logic\Models\Basis.cs" />
+    <Compile Include="Logic\Models\SumValue.cs" />
     <Compile Include="Logic\Models\Table.cs" />
     <Compile Include="Logic\Services\FunctionParser.cs" />
     <Compile Include="Logic\Services\SimplexMethodCalculator.cs" />
@@ -117,6 +118,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

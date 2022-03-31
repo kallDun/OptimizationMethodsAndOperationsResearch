@@ -26,7 +26,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 
         private bool HasSolutions(Table table)
         {
-            for (int i = 0; i < table.Matrix.GetLength(1); i++)
+            for (int i = 0; i < table.Matrix[0].Length - 1; i++)
             {
                 if (table.Matrix[table.Matrix.Length - 1].Skip(1).ToArray()[i] > 0 &&
                     table.Matrix
@@ -105,8 +105,8 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             return Array.IndexOf(
                 table.Matrix[table.Matrix.Length - 1],
                 table.Matrix[table.Matrix.Length - 1]
+                    .Skip(1)
                     .Where(x => x > 0)
-                    .Select(x => Math.Abs(x.ToDouble()))
                     .Min());
         }
 
@@ -114,16 +114,18 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
         {
             int index = -1;
             Fraction min = Fraction.Zero;
-            for (int i = 0; i < table.Matrix[0].Length; i++)
+            for (int i = 0; i < table.Matrix.Length - 1; i++)
             {
                 Fraction fraction = table.Matrix[i][indexOfInputingVector];
                 if (fraction > 0)
                 {
+                    index = i;
                     min = table.Matrix[i][0] / fraction;
+                    break;
                 }
             }
 
-            for (int i = 0; i < table.Matrix[0].Length; i++)
+            for (int i = 0; i < table.Matrix.Length - 1; i++)
             {
                 Fraction fraction = table.Matrix[i][indexOfInputingVector];
                 Fraction relation = table.Matrix[i][0] / fraction;
