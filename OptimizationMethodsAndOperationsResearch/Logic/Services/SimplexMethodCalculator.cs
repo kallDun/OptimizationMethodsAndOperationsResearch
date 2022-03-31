@@ -17,7 +17,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 return table.LastRow
                     .Skip(1)
                     .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                    .Where(x => x > 0)
+                    .Where(x => table.IsMin ? x > 0 : x < 0)
                     .Count() == 0;
             }
             else
@@ -92,6 +92,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 newTable.LastRow[i] = newLastRow[i];
             }
 
+            ChangeHasBigNumbers(newTable);
             return newTable;
         }
 
@@ -114,14 +115,14 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 
         private int GetIndexOfInputingVector(Table table)
         {
-            Fraction min = table.LastRow
+            var founded = table.LastRow
                 .Skip(1)
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                .Where(x => x > 0)
+                .Where(x => table.IsMin ? x > 0 : x < 0)
                 .Min();
             return table.LastRow
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                .Select((x, i) => x == min ? i : -1)
+                .Select((x, i) => x == founded ? i : -1)
                 .OrderBy(x => x)
                 .Last();
         }
@@ -129,8 +130,8 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
         private int GetIndexOfDeletingVector(Table table, int indexOfInputingVector)
         {
             int index = -1;
-            Fraction min = Fraction.Zero;
-            for (int i = 0; i < table.Matrix.Length - 1; i++)
+            Fraction min = int.MaxValue;
+            /*for (int i = 0; i < table.Matrix.Length - 1; i++)
             {
                 Fraction fraction = table.Matrix[i][indexOfInputingVector];
                 if (fraction > 0)
@@ -139,7 +140,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                     min = table.Matrix[i][0] / fraction;
                     break;
                 }
-            }
+            }*/
 
             for (int i = 0; i < table.Matrix.Length - 1; i++)
             {
@@ -150,36 +151,46 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                     index = i;
                     min = relation;
                 }
+                if (table.RowBasises[i].SumValue.HasBigNum) return i; // added M priority
             }
 
             return index;
         }
 
+        public static void ChangeHasBigNumbers(Table table)
+        {
+            foreach (var item in table.LastRow)
+            {
+                if (item.HasBigNum)
+                {
+                    table.HasBigNumbers = true;
+                    return;
+                }
+            }
+            table.HasBigNumbers = false;
+        }
         public static SumValue[] GenerateLastRow(Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
         {
             SumValue[] lastRow = new SumValue[matrix[0].Length];
-            lastRow[0] = CalculateFunction(matrix, columnBasises.ToArray(), rowBasises);
+            lastRow[0] = CalculateFunction(matrix, columnBasises);
             for (int i = 1; i < matrix[0].Length; i++)
             {
                 lastRow[i] = CalculateDelta(i, matrix, columnBasises, rowBasises);
             }
             return lastRow;
         }
-
-        public static SumValue CalculateFunction(Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
+        public static SumValue CalculateFunction(Fraction[][] matrix, Basis[] columnBasises)
         {
             var num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueNumber * matrix[i][0]));
             var m_num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueM * matrix[i][0]));
             return new SumValue(num, m_num);
         }
-
         public static SumValue CalculateDelta(int j, Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
         {
             var num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueNumber * matrix[i][j])) - rowBasises[j - 1].SumValue.ValueNumber;
             var m_num = GetFractionSum(columnBasises.Select((x, i) => x.SumValue.ValueM * matrix[i][j])) - rowBasises[j - 1].SumValue.ValueM;
             return new SumValue(num, m_num);
         }
-
         private static Fraction GetFractionSum(IEnumerable<Fraction> enumerable)
         {
             Fraction sum = 0;

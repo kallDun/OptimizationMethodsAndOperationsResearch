@@ -30,12 +30,15 @@ namespace OptimizationMethodsAndOperationsResearch
         {
             InitializeComponent();
             var start_page = new StartPage();
-            PageFrame.Content = start_page;
+            PageFrame.Content = start_page;            
             start_page.SolveButton.Click += (s, e) => CalculateClick(start_page);
         }
 
         private void CalculateClick(StartPage page)
         {
+            pages.Clear();
+            pages.Add(page);
+
             var (func, matrix) = page.GetFunctionData;
             var curr_table = new FunctionParser().ToTable(func, matrix);
             pages.Add(new TablePage(curr_table));
