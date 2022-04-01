@@ -45,7 +45,9 @@ namespace OptimizationMethodsAndOperationsResearch
             var curr_table = new FunctionParser().ToTable(func, matrix);
             pages.Add(new TablePage(curr_table));
             var simplex_calculator = new SimplexMethodCalculator();
-            while (!simplex_calculator.IsOptimizated(curr_table))
+
+            var counter = 0;
+            while (!simplex_calculator.IsOptimizated(curr_table) && counter < 1000)
             {
                 var prev_table = curr_table.Clone() as Table;
                 VisualDataModel data;
@@ -53,6 +55,7 @@ namespace OptimizationMethodsAndOperationsResearch
                 prev_table.VisualData = data;
                 pages.Add(new TablePage(prev_table));
                 pages.Add(new TablePage(curr_table));
+                counter++;
             }
             if (simplex_calculator.HasSolution)
             {

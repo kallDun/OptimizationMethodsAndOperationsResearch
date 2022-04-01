@@ -14,11 +14,12 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
         {
             if (HasSolutions(table))
             {
-                return table.LastRow
+                /*return table.LastRow
                     .Skip(1)
                     .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
                     .Where(x => table.IsMin ? x > 0 : x < 0)
-                    .Count() == 0;
+                    .Count() == 0;*/
+                return GetLastRowValues(table).Count() == 0;
             }
             else
             {
@@ -118,15 +119,26 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 
         private int GetIndexOfInputingVector(Table table)
         {
-            var founded = table.LastRow
+            /*var founded = table.LastRow
                 .Skip(1)
+                .Take(GetNotArtificialVariablesCount(table.RowBasises))
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
                 .Where(x => (table.IsMin ? x > 0 : x < 0) && x != 0)
-                .Min();
+                .Min();*/
+            var founded = GetLastRowValues(table).Min();
             return table.LastRow
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
                 .Select((x, i) => new { item = x, index = i })
-                .First(x => x.item == founded).index;
+                .First(x => x.item == founded && x.index != 0).index;
+        }
+
+        private static IEnumerable<Fraction> GetLastRowValues(Table table)
+        {
+            return table.LastRow
+                .Skip(1)
+                .Take(GetNotArtificialVariablesCount(table.RowBasises))
+                .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
+                .Where(x => (table.IsMin ? x > 0 : x < 0) && x != 0);
         }
 
         private int GetIndexOfDeletingVector(Table table, int indexOfInputingVector)
@@ -136,6 +148,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 
             for (int i = 0; i < table.Matrix.Length; i++)
             {
+                if (table.ColumnBasises[i].SumValue.HasBigNum) return i; // added M priority
                 Fraction fraction = table.Matrix[i][indexOfInputingVector];
                 Fraction relation = table.Matrix[i][0] / fraction;
                 if (fraction > 0 && relation < min)
@@ -143,7 +156,6 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                     index = i;
                     min = relation;
                 }
-                if (table.RowBasises[i].SumValue.HasBigNum) return i; // added M priority
             }
 
             return index;
@@ -161,6 +173,8 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             }
             table.HasBigNumbers = false;
         }
+        private static int GetNotArtificialVariablesCount(Basis[] rowBasises)
+            => rowBasises.Where(x => !x.SumValue.HasBigNum).Count() - 1;
         public static SumValue[] GenerateLastRow(Fraction[][] matrix, Basis[] columnBasises, Basis[] rowBasises)
         {
             SumValue[] lastRow = new SumValue[matrix[0].Length];
