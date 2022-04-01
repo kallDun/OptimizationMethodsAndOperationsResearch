@@ -53,12 +53,11 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             return true;
         }
         
-        public Table GetNextTable(Table table)
+        public (Table, VisualDataModel) GetNextTable(Table table)
         {
             int indexOfInputingVector = GetIndexOfInputingVector(table);
             int indexOfDeletingVector = GetIndexOfDeletingVector(table, indexOfInputingVector);
             Fraction keyElem = table.Matrix[indexOfDeletingVector][indexOfInputingVector];
-
             Table newTable = (Table)table.Clone();
             newTable.ColumnBasises[indexOfDeletingVector] = table.RowBasises[indexOfInputingVector - 1];
             
@@ -92,8 +91,9 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 newTable.LastRow[i] = newLastRow[i];
             }
 
+            var visualData = new VisualDataModel(new VisualSelectedColsRowsModel(indexOfDeletingVector, indexOfInputingVector));
             ChangeHasBigNumbers(newTable);
-            return newTable;
+            return (newTable, visualData);
         }
 
         public Dictionary<int, Fraction> GetResults(Table table)

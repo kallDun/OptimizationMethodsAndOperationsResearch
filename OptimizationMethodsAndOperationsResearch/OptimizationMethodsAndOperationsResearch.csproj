@@ -62,6 +62,7 @@
     <Compile Include="Logic\Models\Basis.cs" />
     <Compile Include="Logic\Models\SumValue.cs" />
     <Compile Include="Logic\Models\Table.cs" />
+    <Compile Include="Logic\Models\VisualDataModel.cs" />
     <Compile Include="Logic\Services\FunctionParser.cs" />
     <Compile Include="Logic\Services\SimplexMethodCalculator.cs" />
     <Compile Include="Views\StartPage.xaml.cs">

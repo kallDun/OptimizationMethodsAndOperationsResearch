@@ -45,7 +45,11 @@ namespace OptimizationMethodsAndOperationsResearch
             var simplex_calculator = new SimplexMethodCalculator();
             while (!simplex_calculator.IsOptimizated(curr_table))
             {
-                curr_table = simplex_calculator.GetNextTable(curr_table);
+                var prev_table = curr_table.Clone() as Table;
+                VisualDataModel data;
+                (curr_table, data) = simplex_calculator.GetNextTable(curr_table);
+                prev_table.VisualData = data;
+                pages.Add(new TablePage(prev_table));
                 pages.Add(new TablePage(curr_table));
             }
             if (simplex_calculator.HasSolution)
