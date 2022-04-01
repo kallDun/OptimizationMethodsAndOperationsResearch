@@ -101,13 +101,16 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             Dictionary<int, Fraction> results = new Dictionary<int, Fraction>();
             for (int i = 0; i < table.RowBasises.Length; i++)
             {
-                if (table.ColumnBasises.Select(elem => elem.Index).ToArray().Contains(i + 1))
+                results.Add(i + 1, 0);
+            }
+            for (int i = 0; i < table.RowBasises.Length; i++)
+            {
+                for (int j = 0; j < table.ColumnBasises.Length; j++)
                 {
-                    results.Add(i + 1, table.RowBasises[i].SumValue.ValueNumber);
-                }
-                else
-                {
-                    results.Add(i + 1, 0);
+                    if (table.ColumnBasises[j].Index == i + 1)
+                    {
+                        results[i + 1] = table.Matrix[j][0];
+                    }
                 }
             }
             return results;
