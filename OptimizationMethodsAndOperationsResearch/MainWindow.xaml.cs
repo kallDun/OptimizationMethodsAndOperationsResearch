@@ -48,7 +48,7 @@ namespace OptimizationMethodsAndOperationsResearch
                 curr_table = simplex_calculator.GetNextTable(curr_table);
                 pages.Add(new TablePage(curr_table));
             }
-            if (simplex_calculator.hasSolution)
+            if (simplex_calculator.HasSolution)
             {
                 var results = simplex_calculator.GetResults(curr_table);
                 page.OutputTextBox.Text = string.Join("  ", results.Select(x => $"x{x.Key} = {x.Value}"));
@@ -57,6 +57,7 @@ namespace OptimizationMethodsAndOperationsResearch
             {
                 page.OutputTextBox.Text = "No Solutions";
             }
+
             ToLeftButton.IsEnabled = true;
             ToRightButton.IsEnabled = true;
         }

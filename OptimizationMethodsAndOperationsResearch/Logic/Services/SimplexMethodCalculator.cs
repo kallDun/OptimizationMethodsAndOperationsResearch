@@ -8,7 +8,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 {
     class SimplexMethodCalculator
     {
-        public bool hasSolution { get; private set; } = true;
+        public bool HasSolution { get; private set; } = true;
 
         public bool IsOptimizated(Table table)
         {
@@ -22,7 +22,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             }
             else
             {
-                hasSolution = false;
+                HasSolution = false;
                 return true;
             }
         }
@@ -118,31 +118,20 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             var founded = table.LastRow
                 .Skip(1)
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                .Where(x => table.IsMin ? x > 0 : x < 0)
+                .Where(x => (table.IsMin ? x > 0 : x < 0) && x != 0)
                 .Min();
             return table.LastRow
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                .Select((x, i) => x == founded ? i : -1)
-                .OrderBy(x => x)
-                .Last();
+                .Select((x, i) => new { item = x, index = i })
+                .First(x => x.item == founded).index;
         }
 
         private int GetIndexOfDeletingVector(Table table, int indexOfInputingVector)
         {
             int index = -1;
             Fraction min = int.MaxValue;
-            /*for (int i = 0; i < table.Matrix.Length - 1; i++)
-            {
-                Fraction fraction = table.Matrix[i][indexOfInputingVector];
-                if (fraction > 0)
-                {
-                    index = i;
-                    min = table.Matrix[i][0] / fraction;
-                    break;
-                }
-            }*/
 
-            for (int i = 0; i < table.Matrix.Length - 1; i++)
+            for (int i = 0; i < table.Matrix.Length; i++)
             {
                 Fraction fraction = table.Matrix[i][indexOfInputingVector];
                 Fraction relation = table.Matrix[i][0] / fraction;
@@ -159,9 +148,9 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 
         public static void ChangeHasBigNumbers(Table table)
         {
-            foreach (var item in table.LastRow)
+            for (int i = 1; i < table.LastRow.Length; i++)
             {
-                if (item.HasBigNum)
+                if (table.LastRow[i].HasBigNum && !table.RowBasises[i - 1].SumValue.HasBigNum)
                 {
                     table.HasBigNumbers = true;
                     return;
