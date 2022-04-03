@@ -28,12 +28,12 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
         public SumValue[] LastRow { get; private set; }
         public bool HasBigNumbers { get; set; }
         public bool IsMin { get; private set; }
-        public VisualDataModel VisualData { get; set; } = new VisualDataModel();
+        public VisualDataModel VisualData { get; set; } = new();
 
         public object Clone() => new Table(Matrix.Select(x => x.ToArray()).ToArray(),
             ColumnBasises.Select(x => x.Clone() as Basis).ToArray(),
             RowBasises.Select(x => x.Clone() as Basis).ToArray(),
             LastRow.ToArray(), IsMin, HasBigNumbers)
-        { VisualData = new VisualDataModel() };
+        { VisualData = new() };
     }
 }

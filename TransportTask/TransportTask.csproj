@@ -5,10 +5,10 @@
     <LangVersion>preview</LangVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EFF1B999-F1B7-48DD-BF0F-4BFEAB764D3A}</ProjectGuid>
+    <ProjectGuid>{4AA9361B-83C5-4596-939C-CC1AC821D068}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>OptimizationMethodsAndOperationsResearch</RootNamespace>
-    <AssemblyName>OptimizationMethodsAndOperationsResearch</AssemblyName>
+    <RootNamespace>TransportTask</RootNamespace>
+    <AssemblyName>TransportTask</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,8 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fractions, Version=7.1.0.0, Culture=neutral, PublicKeyToken=e629dc3e25c47cef, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fractions.7.1.0\lib\netstandard2.0\Fractions.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.5.0.0\lib\net48\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -60,12 +60,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Logic\Models\Basis.cs" />
-    <Compile Include="Logic\Models\SumValue.cs" />
+    <Compile Include="Logic\Models\Cell.cs" />
+    <Compile Include="Logic\Models\PrepCell.cs" />
+    <Compile Include="Logic\Models\Cycle.cs" />
+    <Compile Include="Logic\Models\PrepTable.cs" />
+    <Compile Include="Logic\Models\Vertex.cs" />
     <Compile Include="Logic\Models\Table.cs" />
-    <Compile Include="Logic\Models\VisualDataModel.cs" />
-    <Compile Include="Logic\Services\FunctionParser.cs" />
-    <Compile Include="Logic\Services\SimplexMethodCalculator.cs" />
+    <Compile Include="Logic\Services\Convertors\CellConvertor.cs" />
+    <Compile Include="Logic\Services\Convertors\TableConvertor.cs" />
+    <Compile Include="Logic\Services\Convertors\IConvertor.cs" />
+    <Compile Include="Logic\Services\GeneratePotentialService.cs" />
+    <Compile Include="Logic\Services\Methods\IInitialRefPlanBuilder.cs" />
+    <Compile Include="Logic\Services\Methods\IPlanUpgrader.cs" />
+    <Compile Include="Logic\Services\Methods\MinElementsMethod.cs" />
+    <Compile Include="Logic\Services\Methods\PotentialMethod.cs" />
+    <Compile Include="Views\PrepTablePage.xaml.cs">
+      <DependentUpon>PrepTablePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
@@ -84,6 +95,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PrepTablePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\StartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,6 +126,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -120,5 +138,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

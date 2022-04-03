@@ -23,9 +23,6 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
             else return ValueNumber.ToString();
         }
 
-        public static SumValue operator +(SumValue a, SumValue b)
-        {
-            return new SumValue(a.ValueNumber + b.ValueNumber, a.ValueM + b.ValueM);
-        }
+        public static SumValue operator +(SumValue a, SumValue b) => new(a.ValueNumber + b.ValueNumber, a.ValueM + b.ValueM);
     }
 }
