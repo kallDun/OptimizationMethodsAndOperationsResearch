@@ -14,11 +14,6 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
         {
             if (HasSolutions(table))
             {
-                /*return table.LastRow
-                    .Skip(1)
-                    .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                    .Where(x => table.IsMin ? x > 0 : x < 0)
-                    .Count() == 0;*/
                 return GetLastRowValues(table).Count() == 0;
             }
             else
@@ -119,12 +114,6 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 
         private int GetIndexOfInputingVector(Table table)
         {
-            /*var founded = table.LastRow
-                .Skip(1)
-                .Take(GetNotArtificialVariablesCount(table.RowBasises))
-                .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                .Where(x => (table.IsMin ? x > 0 : x < 0) && x != 0)
-                .Min();*/
             var founded = GetLastRowValues(table).Min();
             return table.LastRow
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
@@ -138,7 +127,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 .Skip(1)
                 .Take(GetNotArtificialVariablesCount(table.RowBasises))
                 .Select(x => table.HasBigNumbers ? x.ValueM : x.ValueNumber)
-                .Where(x => (table.IsMin ? x > 0 : x < 0) && x != 0);
+                .Where(x => table.IsMin ? x > 0 : x < 0);
         }
 
         private int GetIndexOfDeletingVector(Table table, int indexOfInputingVector)
