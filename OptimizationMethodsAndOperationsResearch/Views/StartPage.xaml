@@ -27,10 +27,17 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Grid.Row="2" Grid.Column="1" Margin="20" x:Name="SolveButton"
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 15" Orientation="Horizontal"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+           <Button x:Name="SolveButton" Margin="2 0 60 0" Width="200px"
                 Background="Transparent" BorderThickness="2" BorderBrush="Black">
-            <TextBlock Text="Solve Func" Style="{StaticResource TextBoxTableStyle}"/>
-        </Button>
+                <TextBlock Text="Solve Func" Style="{StaticResource TextBoxTableStyle}"/>
+            </Button>
+            <Button HorizontalAlignment="Right" Margin="-54 0 0 0" x:Name="ToPdfButton"
+                    Width="54" BorderThickness="2" BorderBrush="Black" Background="Transparent">
+                <Image Source="pack://application:,,,/Images/ToPdf.png"/>
+            </Button>
+        </StackPanel>
         <TextBox Grid.ColumnSpan="3" Margin="20 0" Background="Transparent"
                  BorderThickness="2, 0, 0, 0" BorderBrush="Black" FontSize="24" FontFamily="DejaVu Sans"
                  TextWrapping="Wrap" TextAlignment="Center"

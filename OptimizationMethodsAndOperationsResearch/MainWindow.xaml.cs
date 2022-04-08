@@ -32,8 +32,10 @@ namespace OptimizationMethodsAndOperationsResearch
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
             InitializeComponent();
             var start_page = new StartPage();
-            PageFrame.Content = start_page;            
+            PageFrame.Content = start_page;
+            pages.Add(start_page);
             start_page.SolveButton.Click += (s, e) => CalculateClick(start_page);
+            start_page.ToPdfButton.Click += (s, e) => PdfService.SaveToPdf(pages);
         }
 
         private void CalculateClick(StartPage page)
