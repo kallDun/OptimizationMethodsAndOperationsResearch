@@ -1,6 +1,6 @@
 ﻿namespace TransportTask.Logic.Models
 {
-    class PrepTable
+    public class PrepTable
     {
         public PrepTable(PrepCell[][] cells, int[] reserves, int[] need)
         {

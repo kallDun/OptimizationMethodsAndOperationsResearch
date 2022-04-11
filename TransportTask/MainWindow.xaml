@@ -7,6 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Frame x:Name="PageFrame" NavigationUIVisibility="Hidden"/>
+        <Button Width="35" Height="35" Background="Transparent" BorderBrush="Black" BorderThickness="2"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15"
+                Click="ToRightButton_Click"  x:Name="ToRightButton" IsEnabled="False">
+            <TextBlock Text=">" FontSize="23" FontFamily="DejaVu Sans"/>
+        </Button>
+        <Button Width="35" Height="35" Background="Transparent" BorderBrush="Black" BorderThickness="2"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15"
+                Click="ToLeftButton_Click"  x:Name="ToLeftButton" IsEnabled="False">
+            <TextBlock Text="&lt;" FontSize="23" FontFamily="DejaVu Sans"/>
+        </Button>
     </Grid>
 </Window>

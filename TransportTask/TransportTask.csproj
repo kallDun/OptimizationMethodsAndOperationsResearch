@@ -74,6 +74,7 @@
     <Compile Include="Logic\Services\Methods\IPlanUpgrader.cs" />
     <Compile Include="Logic\Services\Methods\MinElementsMethod.cs" />
     <Compile Include="Logic\Services\Methods\PotentialMethod.cs" />
+    <Compile Include="Views\PrepTableGenerator.cs" />
     <Compile Include="Views\PrepTablePage.xaml.cs">
       <DependentUpon>PrepTablePage.xaml</DependentUpon>
     </Compile>

@@ -2,7 +2,7 @@
 {
     public struct PrepCell
     {
-        public PrepCell(int coefficient, bool isProductsNone, int products = 0, bool isChecked = false)
+        public PrepCell(int coefficient, int products = 0, bool isProductsNone = false, bool isChecked = false)
         {
             Coefficient = coefficient;
             Products = products;
@@ -14,5 +14,7 @@
         public int Products { get; set; }
         public bool IsProductsNone { get; set; }
         public bool IsChecked { get; set; }
+
+        public static implicit operator PrepCell(int n) => new PrepCell(n);
     }
 }

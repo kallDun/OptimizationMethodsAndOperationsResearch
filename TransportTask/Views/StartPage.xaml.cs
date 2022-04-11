@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TransportTask.Logic.Models;
 
 namespace TransportTask.Views
 {
@@ -23,6 +12,23 @@ namespace TransportTask.Views
         public StartPage()
         {
             InitializeComponent();
+            var (grid, deleg) = PrepTableGenerator.InitReturnTable(GetPrepTablePreview());
+            MainGrid.Children.Add(grid);
+        }
+
+        private PrepTable GetPrepTablePreview()
+        {
+            var cells = new PrepCell[][]
+            {
+                new PrepCell[] { 7, 6, 3 },
+                new PrepCell[] { 2, 5, 4 },
+                new PrepCell[] { 9, 10, 11 },
+            };
+            var reserves = new int[] { 175, 225, 230 };
+            var need = new int[] { 205, 200, 250 };
+
+            PrepTable table = new(cells, reserves, need);
+            return table;
         }
     }
 }
