@@ -60,7 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Logic\Methods\LeftUpperCornerMethod.cs" />
     <Compile Include="Logic\Models\Cell.cs" />
+    <Compile Include="Logic\Models\Coord.cs" />
     <Compile Include="Logic\Models\PrepCell.cs" />
     <Compile Include="Logic\Models\Cycle.cs" />
     <Compile Include="Logic\Models\PrepTable.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Logic\Methods\IPlanUpgrader.cs" />
     <Compile Include="Logic\Methods\MinElementsMethod.cs" />
     <Compile Include="Logic\Methods\PotentialMethod.cs" />
+    <Compile Include="Logic\Services\InitialRefPlanBuilderService.cs" />
     <Compile Include="Views\TablesGenerator.cs" />
     <Compile Include="Views\PrepTablePage.xaml.cs">
       <DependentUpon>PrepTablePage.xaml</DependentUpon>

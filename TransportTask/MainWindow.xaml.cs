@@ -40,7 +40,8 @@ namespace TransportTask
                 var current_prep_table = new ConditionOfExistingService().Check(start_table);
                 pages.Add(new PrepTablePage(current_prep_table));
 
-                IInitialRefPlanBuilder refPlanBuilder = new MinElementsMethod();
+                IInitialRefPlanBuilder refPlanBuilder = new LeftUpperCornerMethod();
+                //IInitialRefPlanBuilder refPlanBuilder = new MinElementsMethod();
                 while (!refPlanBuilder.IsBuilt(current_prep_table))
                 {
                     current_prep_table = refPlanBuilder.Build(current_prep_table);
@@ -52,10 +53,17 @@ namespace TransportTask
                 pages.Add(new TablePage(current_table));
 
                 IPlanUpgrader planUpgrader = new PotentialMethod();
+                GeneratePotentialService potentialService = new();
+                current_table.Cells = potentialService.GeneratePotentials(current_table.Cells);
+                pages.Add(new TablePage(current_table));
+
                 while (planUpgrader.CanUpgrade(current_table))
                 {
-                    current_table = planUpgrader.Upgrade(current_table);
-                    pages.Add(new TablePage(current_table));
+                    var (table1, table2, table3) = planUpgrader.Upgrade(current_table);
+                    pages.Add(new TablePage(table1));
+                    pages.Add(new TablePage(table2));
+                    pages.Add(new TablePage(table3));
+                    current_table = table3;
                 }
             }
             catch (Exception e)

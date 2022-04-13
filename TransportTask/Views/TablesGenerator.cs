@@ -172,48 +172,15 @@ namespace TransportTask.Views
             }
         }
 
-        public static Grid InitTable(PrepTable table)
+        public static Grid InitPrepReadonlyTable(PrepTable table)
         {
             var (grid, del) = InitReturnTable(table, true);
             return grid;
         }
-
         public static (Grid, GetPrepTableDelegate) InitReturnTable(PrepTable table, bool IsReadonly = false)
         {
-            Grid main_grid = new();
-            int rows = 3 + table.Reserves.Length;
-            int cols = 2 + table.Need.Length;
-            for (int i = 0; i < rows; i++)
-            {
-                main_grid.RowDefinitions.Add(new RowDefinition());
-            }
-            for (int i = 0; i < cols; i++)
-            {
-                main_grid.ColumnDefinitions.Add(new ColumnDefinition());
-            }
-            TableDesign tableDesign = new TableDesign(main_grid, rows, cols);
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    if (i == 1 && (j == 0 || j == cols - 1))
-                    {
-                        Grid.SetRowSpan(tableDesign.background_boxes[i - 1][j], 2);
-                        continue;
-                    }
-                    if (i == 0 && j > 1 && j < cols - 1) continue;
-                    FillGridCell(main_grid, tableDesign, i, j);
-                }
-            }
-            Grid.SetColumnSpan(tableDesign.background_boxes[0][1], cols - 2);
-
-            for (int i = 2; i < rows - 1; i++) tableDesign.text_boxes[i][0].center.Text = $"A{GetSmallNumber(i - 1)}";
-            for (int j = 1; j < cols - 1; j++) tableDesign.text_boxes[1][j].center.Text = $"B{GetSmallNumber(j)}";
-            tableDesign.text_boxes[0][0].center.Text = "Supply";
-            tableDesign.text_boxes[0][1].center.Text = "Consumption points";
-            tableDesign.text_boxes[0][cols - 1].center.Text = "Stocks";
-            tableDesign.text_boxes[rows - 1][0].center.Text = "Need";
+            GenerateGrid(table.Reserves.Length, table.Need.Length, draw_last_row_col: true, 
+                out Grid main_grid, out int rows, out int cols, out TableDesign tableDesign);
 
             for (int i = 0; i < table.Reserves.Length; i++)
             {
@@ -235,7 +202,6 @@ namespace TransportTask.Views
                     item.center.Foreground = Brushes.DarkSlateBlue;
                 }
             }
-
             for (int i = 0; i < table.Cells.Length; i++)
             {
                 for (int j = 0; j < table.Cells[i].Length; j++)
@@ -276,7 +242,7 @@ namespace TransportTask.Views
                 };
                 col_stack.Children.Add(add_col);
                 col_stack.Children.Add(remove_col);
-                
+
                 var add_row = GenerateButton("+");
                 add_row.Click += (s, e) => tableDesign.AddRow();
                 var remove_row = GenerateButton("-");
@@ -327,7 +293,75 @@ namespace TransportTask.Views
 
             return (main_grid, return_table);
         }
+        public static Grid InitTable(Table table)
+        {
+            GenerateGrid(table.Cells.Length, table.Cells[0].Length, draw_last_row_col: false,
+                out Grid main_grid, out int rows, out int cols, out TableDesign tableDesign);
 
+            for (int i = 0; i < table.Cells.Length; i++)
+            {
+                for (int j = 0; j < table.Cells[i].Length; j++)
+                {
+                    var item = tableDesign.text_boxes[i + 2][j + 1];
+                    var cell = table.Cells[i][j];
+
+                    item.left_top.Text = cell.Coefficient.ToString();
+                    if (!cell.IsProductsNone)
+                    {
+                        item.right_bottom.Text = cell.Products.ToString();
+                        item.right_bottom.FontWeight = FontWeights.Bold;
+                    }
+                    if (!cell.IsPotentialNone)
+                    {
+                        item.right_top.Text = cell.Potential.ToString();
+                        item.right_top.BorderThickness = new Thickness(0.5);
+                        item.right_top.BorderBrush = Brushes.Black;
+                    }
+                }
+            }
+
+            return main_grid;
+        }
+
+        private static void GenerateGrid(int reserves_count, int need_count, bool draw_last_row_col, out Grid main_grid, out int rows, out int cols, out TableDesign tableDesign)
+        {
+            main_grid = new();
+            rows = 3 + reserves_count;
+            cols = 2 + need_count;
+            var rows_real = draw_last_row_col ? rows : rows - 1;
+            var cols_real = draw_last_row_col ? cols : cols - 1;
+
+            for (int i = 0; i < rows_real; i++)
+            {
+                main_grid.RowDefinitions.Add(new RowDefinition());
+            }
+            for (int i = 0; i < cols_real; i++)
+            {
+                main_grid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+            tableDesign = new TableDesign(main_grid, rows_real, cols_real);
+            for (int i = 0; i < rows_real; i++)
+            {
+                for (int j = 0; j < cols_real; j++)
+                {
+                    if (i == 1 && (j == 0 || j == cols - 1))
+                    {
+                        Grid.SetRowSpan(tableDesign.background_boxes[i - 1][j], 2);
+                        continue;
+                    }
+                    if (i == 0 && j > 1 && j < cols - 1) continue;
+                    FillGridCell(main_grid, tableDesign, i, j);
+                }
+            }
+            Grid.SetColumnSpan(tableDesign.background_boxes[0][1], cols - 2);
+
+            for (int i = 2; i < rows - 1; i++) tableDesign.text_boxes[i][0].center.Text = $"A{GetSmallNumber(i - 1)}";
+            for (int j = 1; j < cols - 1; j++) tableDesign.text_boxes[1][j].center.Text = $"B{GetSmallNumber(j)}";
+            tableDesign.text_boxes[0][0].center.Text = "Supply";
+            tableDesign.text_boxes[0][1].center.Text = "Consumption points";
+            if (cols == cols_real) tableDesign.text_boxes[0][cols - 1].center.Text = "Stocks";
+            if (rows == rows_real) tableDesign.text_boxes[rows - 1][0].center.Text = "Need";
+        }
         private static void FillGridCell(Grid main_grid, TableDesign tableDesign, int i, int j)
         {
             var background = new Grid();

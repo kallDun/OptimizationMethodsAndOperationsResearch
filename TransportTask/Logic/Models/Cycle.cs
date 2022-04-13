@@ -5,7 +5,8 @@ namespace TransportTask.Logic.Models
 {
     public struct Cycle
     {
-        public Point StartVertex { get; set; }
+        public bool IsVisible { get; set; }
+        public Coord StartVertex { get; set; }
         public List<Vertex> Vertices { get; set; }
         public Vertex SelectedMinimumVertex { get; set; }
     }
