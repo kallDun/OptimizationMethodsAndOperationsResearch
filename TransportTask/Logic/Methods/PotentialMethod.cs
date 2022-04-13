@@ -33,7 +33,7 @@ namespace TransportTask.Logic.Services.Methods
 
         private Table CalcTableByCycle(Table cycle_table)
         {
-
+            throw new NotImplementedException("Need to write this shit");
         }
 
         private Table GetCycleTable(Table table)
@@ -83,7 +83,7 @@ namespace TransportTask.Logic.Services.Methods
 
         private List<Coord> GetCycleVerticesRecursive(Cell[][] cells, Coord start)
         {
-
+            throw new NotImplementedException("Need to write this shit");
         }
     }
 }
