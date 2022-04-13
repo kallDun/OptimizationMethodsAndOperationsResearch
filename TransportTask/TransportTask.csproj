@@ -69,6 +69,7 @@
     <Compile Include="Logic\Convertors\CellConvertor.cs" />
     <Compile Include="Logic\Convertors\TableConvertor.cs" />
     <Compile Include="Logic\Convertors\IConvertor.cs" />
+    <Compile Include="Logic\Services\ConditionOfExistingService.cs" />
     <Compile Include="Logic\Services\GeneratePotentialService.cs" />
     <Compile Include="Logic\Methods\IInitialRefPlanBuilder.cs" />
     <Compile Include="Logic\Methods\IPlanUpgrader.cs" />

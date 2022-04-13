@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using TransportTask.Logic.Services;
 using TransportTask.Views;
 
 namespace TransportTask
@@ -33,7 +34,8 @@ namespace TransportTask
             {
                 var start_table = startPage.GetTable();
                 pages.Add(new PrepTablePage(start_table));
-
+                var checked_table = new ConditionOfExistingService().Check(start_table);
+                pages.Add(new PrepTablePage(checked_table));
 
 
             }
