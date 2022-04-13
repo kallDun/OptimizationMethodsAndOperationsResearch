@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using TransportTask.Logic.Models;
@@ -9,7 +11,7 @@ namespace TransportTask.Views
     {
         public delegate PrepTable GetPrepTableDelegate();
 
-        struct TextBoxes
+        class TextBoxes
         {
             public TextBox center;
             public TextBox left_top;
@@ -27,12 +29,14 @@ namespace TransportTask.Views
         }
         class TableDesign
         {
+            Grid MainGrid;
             public TextBoxes[][] text_boxes;
             public Grid[][] background_boxes;
             public Border[][] border_boxes;
 
-            public TableDesign(int rows, int cols)
+            public TableDesign(Grid main_grid, int rows, int cols)
             {
+                MainGrid = main_grid;
                 text_boxes = new TextBoxes[rows][];
                 for (int i = 0; i < text_boxes.Length; i++) text_boxes[i] = new TextBoxes[cols];
                 background_boxes = new Grid[rows][];
@@ -41,14 +45,131 @@ namespace TransportTask.Views
                 for (int i = 0; i < border_boxes.Length; i++) border_boxes[i] = new Border[cols];
             }
 
-            public void Resize(int rows, int cols)
+            public void RemoveCol()
             {
-                if (rows < 3 || cols < 2) return;
-                int prev_rows = text_boxes.Length;
-                int prev_cols = text_boxes[0].Length;
+                var cols = background_boxes[0].Length - 1;
+                if (cols < 3) return;
 
+                MainGrid.ColumnDefinitions.RemoveAt(cols);
+                for (int i = 0; i < background_boxes.Length; i++)
+                {
+                    var item = background_boxes[i][cols];
+                    if (item != null)
+                    {
+                        Grid.SetColumn(item, cols - 1);
+                    }                    
+                    MainGrid.Children.Remove(background_boxes[i][cols - 1]);
+                    background_boxes[i][cols - 1] = item;
+                    text_boxes[i][cols - 1] = text_boxes[i][cols];
+                    border_boxes[i][cols - 1] = border_boxes[i][cols];       
+                    
+                    Array.Resize(ref background_boxes[i], cols);
+                    Array.Resize(ref text_boxes[i], cols);
+                    Array.Resize(ref border_boxes[i], cols);
+                }
+                Grid.SetColumnSpan(background_boxes[0][1], cols - 2);
+            }
+            public void AddCol()
+            {
+                var cols = background_boxes[0].Length + 1;
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                for (int i = 0; i < background_boxes.Length; i++)
+                {
+                    Array.Resize(ref background_boxes[i], cols);
+                    Array.Resize(ref text_boxes[i], cols);
+                    Array.Resize(ref border_boxes[i], cols);
 
+                    var item = background_boxes[i][cols - 2];
+                    background_boxes[i][cols - 1] = item;
+                    text_boxes[i][cols - 1] = text_boxes[i][cols - 2];
+                    border_boxes[i][cols - 1] = border_boxes[i][cols - 2];
 
+                    if (item != null)
+                    {
+                        Grid.SetColumn(item, cols - 1);
+                    }
+                    if (background_boxes[i][cols - 3] != null)
+                    {
+                        FillGridCell(MainGrid, this, i, cols - 2);
+
+                        var textbox = text_boxes[i][cols - 2].center;
+                        if (i == 1)
+                        {
+                            textbox.Text = $"B{GetSmallNumber(cols - 2)}";
+                        }
+                        else
+                        {
+                            textbox.Text = "0";
+                            textbox.IsReadOnly = false;
+                            textbox.Foreground = Brushes.DarkSlateBlue;
+                        }
+                    }
+                    else
+                    {
+                        background_boxes[i][cols - 2] = null;
+                        text_boxes[i][cols - 2] = null;
+                        border_boxes[i][cols - 2] = null;
+                    }
+                }
+                Grid.SetColumnSpan(background_boxes[0][1], cols - 2);
+            }
+            public void RemoveRow()
+            {
+                var rows = background_boxes.Length - 1;
+                if (rows < 4) return;
+
+                MainGrid.RowDefinitions.RemoveAt(rows);
+                for (int j = 0; j < background_boxes[0].Length; j++)
+                {
+                    var item = background_boxes[rows][j];
+                    if (item != null)
+                    {
+                        Grid.SetRow(item, rows - 1);
+                    }
+                    MainGrid.Children.Remove(background_boxes[rows - 1][j]);
+                    background_boxes[rows - 1][j] = item;
+                    text_boxes[rows - 1][j] = text_boxes[rows][j];
+                    border_boxes[rows - 1][j] = border_boxes[rows][j];                    
+                }
+                Array.Resize(ref background_boxes, rows);
+                Array.Resize(ref text_boxes, rows);
+                Array.Resize(ref border_boxes, rows);
+            }
+            public void AddRow()
+            {
+                var rows = background_boxes.Length + 1;
+                MainGrid.RowDefinitions.Add(new RowDefinition());
+
+                var cols = background_boxes[0].Length;
+                Array.Resize(ref background_boxes, rows);
+                background_boxes[rows - 1] = new Grid[cols];
+                Array.Resize(ref text_boxes, rows);
+                text_boxes[rows - 1] = new TextBoxes[cols];
+                Array.Resize(ref border_boxes, rows);
+                border_boxes[rows - 1] = new Border[cols];
+
+                for (int j = 0; j < background_boxes[0].Length; j++)
+                {
+                    var item = background_boxes[rows - 2][j];
+                    background_boxes[rows - 1][j] = item;
+                    text_boxes[rows - 1][j] = text_boxes[rows - 2][j];
+                    border_boxes[rows - 1][j] = border_boxes[rows - 2][j];
+
+                    Grid.SetRow(item, rows - 1);
+                    FillGridCell(MainGrid, this, rows - 2, j);
+
+                    var textbox = text_boxes[rows - 2][j].center;
+                    if (j == 0)
+                    {
+                        textbox.Text = $"A{GetSmallNumber(rows - 3)}";
+                    }
+                    else
+                    {
+                        textbox.Text = "0";
+                        textbox.IsReadOnly = false;
+                        textbox.Foreground = Brushes.DarkSlateBlue;
+                    }
+                }
             }
         }
 
@@ -60,7 +181,7 @@ namespace TransportTask.Views
 
         public static (Grid, GetPrepTableDelegate) InitReturnTable(PrepTable table, bool IsReadonly = false)
         {
-            Grid main_grid = new Grid();
+            Grid main_grid = new();
             int rows = 3 + table.Reserves.Length;
             int cols = 2 + table.Need.Length;
             for (int i = 0; i < rows; i++)
@@ -71,7 +192,7 @@ namespace TransportTask.Views
             {
                 main_grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
-            TableDesign tableDesign = new TableDesign(rows, cols);
+            TableDesign tableDesign = new TableDesign(main_grid, rows, cols);
 
             for (int i = 0; i < rows; i++)
             {
@@ -83,33 +204,13 @@ namespace TransportTask.Views
                         continue;
                     }
                     if (i == 0 && j > 1 && j < cols - 1) continue;
-
-                    var background = new Grid();
-                    var border = new Border
-                    {
-                        BorderThickness = new Thickness(1),
-                        BorderBrush = Brushes.DimGray
-                    };
-                    main_grid.Children.Add(background);
-                    background.Children.Add(border);
-
-                    TextBox textbox_center = GenerateTextBox(background, VerticalAlignment.Center, HorizontalAlignment.Center);
-                    TextBox textbox_left_top = GenerateTextBox(background, VerticalAlignment.Top, HorizontalAlignment.Left);
-                    TextBox textbox_left_bottom = GenerateTextBox(background, VerticalAlignment.Bottom, HorizontalAlignment.Left);
-                    TextBox textbox_right_top = GenerateTextBox(background, VerticalAlignment.Top, HorizontalAlignment.Right);
-                    TextBox textbox_right_bottom = GenerateTextBox(background, VerticalAlignment.Bottom, HorizontalAlignment.Right);
-                    tableDesign.text_boxes[i][j] = new TextBoxes(textbox_center, textbox_left_top, textbox_left_bottom, textbox_right_top, textbox_right_bottom);
-                    tableDesign.
-                    background_boxes[i][j] = background;
-                    tableDesign.border_boxes[i][j] = border;
-                    Grid.SetRow(background, i);
-                    Grid.SetColumn(background, j);
+                    FillGridCell(main_grid, tableDesign, i, j);
                 }
             }
             Grid.SetColumnSpan(tableDesign.background_boxes[0][1], cols - 2);
 
-            for (int i = 2; i < 5; i++) tableDesign.text_boxes[i][0].center.Text = $"A{GetSmallNumber(i - 1)}";
-            for (int j = 1; j < 4; j++) tableDesign.text_boxes[1][j].center.Text = $"B{GetSmallNumber(j)}";
+            for (int i = 2; i < rows - 1; i++) tableDesign.text_boxes[i][0].center.Text = $"A{GetSmallNumber(i - 1)}";
+            for (int j = 1; j < cols - 1; j++) tableDesign.text_boxes[1][j].center.Text = $"B{GetSmallNumber(j)}";
             tableDesign.text_boxes[0][0].center.Text = "Supply";
             tableDesign.text_boxes[0][1].center.Text = "Consumption points";
             tableDesign.text_boxes[0][cols - 1].center.Text = "Stocks";
@@ -160,10 +261,42 @@ namespace TransportTask.Views
                     }
                 }
             }
+
+            if (!IsReadonly) // add buttons
+            {
+                var parent = tableDesign.background_boxes[rows - 1][cols - 1];
+                var add_col = GenerateButton("+");
+                add_col.Click += (s, e) => tableDesign.AddCol();
+                var remove_col = GenerateButton("-");
+                remove_col.Click += (s, e) => tableDesign.RemoveCol();
+                var col_stack = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                col_stack.Children.Add(add_col);
+                col_stack.Children.Add(remove_col);
+                
+                var add_row = GenerateButton("+");
+                add_row.Click += (s, e) => tableDesign.AddRow();
+                var remove_row = GenerateButton("-");
+                remove_row.Click += (s, e) => tableDesign.RemoveRow();
+                var row_stack = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+                row_stack.Children.Add(add_row);
+                row_stack.Children.Add(remove_row);
+
+                parent.Children.Add(col_stack);
+                parent.Children.Add(row_stack);
+            }
+
             var return_table = new GetPrepTableDelegate(() =>
             {
-
-
                 /*var table_ = new PrepTable(cells, reserves, need);
                 return table_;*/
                 return null;
@@ -172,6 +305,29 @@ namespace TransportTask.Views
             return (main_grid, return_table);
         }
 
+        private static void FillGridCell(Grid main_grid, TableDesign tableDesign, int i, int j)
+        {
+            var background = new Grid();
+            var border = new Border
+            {
+                BorderThickness = new Thickness(1),
+                BorderBrush = Brushes.DimGray
+            };
+            main_grid.Children.Add(background);
+            background.Children.Add(border);
+
+            TextBox textbox_center = GenerateTextBox(background, VerticalAlignment.Center, HorizontalAlignment.Center);
+            TextBox textbox_left_top = GenerateTextBox(background, VerticalAlignment.Top, HorizontalAlignment.Left);
+            TextBox textbox_left_bottom = GenerateTextBox(background, VerticalAlignment.Bottom, HorizontalAlignment.Left);
+            TextBox textbox_right_top = GenerateTextBox(background, VerticalAlignment.Top, HorizontalAlignment.Right);
+            TextBox textbox_right_bottom = GenerateTextBox(background, VerticalAlignment.Bottom, HorizontalAlignment.Right);
+            
+            tableDesign.text_boxes[i][j] = new TextBoxes(textbox_center, textbox_left_top, textbox_left_bottom, textbox_right_top, textbox_right_bottom); ;
+            tableDesign.background_boxes[i][j] = background;
+            tableDesign.border_boxes[i][j] = border;
+            Grid.SetRow(background, i);
+            Grid.SetColumn(background, j);
+        }
 
         private static Button GenerateButton(string text)
         {
@@ -182,8 +338,11 @@ namespace TransportTask.Views
                     Text = text,
                     FontSize = 16,
                     FontFamily = new FontFamily("DejaVu Sans"),
-                    Foreground = Brushes.IndianRed
+                    Foreground = Brushes.DarkSlateBlue,                    
                 },
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(1),
+                BorderBrush = Brushes.DarkSlateBlue,
                 Width = 20,
                 Height = 20
             };
@@ -206,7 +365,6 @@ namespace TransportTask.Views
             grid.Children.Add(textbox);
             return textbox;
         }
-
         static char GetSmallNumber(int num) => (char)(8320 + num);
     }
 }
