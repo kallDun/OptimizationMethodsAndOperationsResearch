@@ -12,7 +12,7 @@ namespace TransportTask.Views
         public PrepTablePage(PrepTable table)
         {
             InitializeComponent();
-            var grid = PrepTableGenerator.InitTable(table);
+            var grid = TablesGenerator.InitTable(table);
             ViewGrid.Children.Add(grid);
         }
     }

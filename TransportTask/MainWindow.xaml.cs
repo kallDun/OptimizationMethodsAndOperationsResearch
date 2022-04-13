@@ -5,7 +5,10 @@ using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using TransportTask.Logic.Models;
 using TransportTask.Logic.Services;
+using TransportTask.Logic.Services.Convertors;
+using TransportTask.Logic.Services.Methods;
 using TransportTask.Views;
 
 namespace TransportTask
@@ -34,10 +37,26 @@ namespace TransportTask
             {
                 var start_table = startPage.GetTable();
                 pages.Add(new PrepTablePage(start_table));
-                var checked_table = new ConditionOfExistingService().Check(start_table);
-                pages.Add(new PrepTablePage(checked_table));
+                var current_prep_table = new ConditionOfExistingService().Check(start_table);
+                pages.Add(new PrepTablePage(current_prep_table));
 
+                IInitialRefPlanBuilder refPlanBuilder = new MinElementsMethod();
+                while (!refPlanBuilder.IsBuilt(current_prep_table))
+                {
+                    current_prep_table = refPlanBuilder.Build(current_prep_table);
+                    pages.Add(new PrepTablePage(current_prep_table));
+                }
 
+                IConvertor<Table, PrepTable> convertor = new TableConvertor();
+                var current_table = convertor.Convert(current_prep_table);
+                pages.Add(new TablePage(current_table));
+
+                IPlanUpgrader planUpgrader = new PotentialMethod();
+                while (planUpgrader.CanUpgrade(current_table))
+                {
+                    current_table = planUpgrader.Upgrade(current_table);
+                    pages.Add(new TablePage(current_table));
+                }
             }
             catch (Exception e)
             {

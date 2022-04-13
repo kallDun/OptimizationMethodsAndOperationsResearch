@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using TransportTask.Logic.Models;
-using static TransportTask.Views.PrepTableGenerator;
+using static TransportTask.Views.TablesGenerator;
 
 namespace TransportTask.Views
 {
@@ -20,7 +20,7 @@ namespace TransportTask.Views
             GetTable = deleg;
         }
 
-        private PrepTable GetPrepTablePreview()
+        private PrepTable GetVariantPrepTable()
         {
             var cells = new PrepCell[][]
             {
@@ -30,6 +30,20 @@ namespace TransportTask.Views
             };
             var reserves = new int[] { 175, 225, 230 };
             var need = new int[] { 205, 200, 250 };
+
+            PrepTable table = new(cells, reserves, need);
+            return table;
+        }
+        private PrepTable GetPrepTablePreview()
+        {
+            var cells = new PrepCell[][]
+            {
+                new PrepCell[] { 9, 7, 5 },
+                new PrepCell[] { 2, 8, 6 },
+                new PrepCell[] { 1, 9, 7 },
+            };
+            var reserves = new int[] { 50, 70, 20 };
+            var need = new int[] { 30, 20, 80 };
 
             PrepTable table = new(cells, reserves, need);
             return table;

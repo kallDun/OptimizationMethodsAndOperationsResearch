@@ -8,7 +8,7 @@ namespace TransportTask.Views
 {
     public delegate PrepTable GetPrepTableDelegate();
 
-    static class PrepTableGenerator
+    static class TablesGenerator
     {   
         class TextBoxes
         {
