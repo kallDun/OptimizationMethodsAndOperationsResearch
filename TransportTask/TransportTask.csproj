@@ -66,14 +66,14 @@
     <Compile Include="Logic\Models\PrepTable.cs" />
     <Compile Include="Logic\Models\Vertex.cs" />
     <Compile Include="Logic\Models\Table.cs" />
-    <Compile Include="Logic\Services\Convertors\CellConvertor.cs" />
-    <Compile Include="Logic\Services\Convertors\TableConvertor.cs" />
-    <Compile Include="Logic\Services\Convertors\IConvertor.cs" />
+    <Compile Include="Logic\Convertors\CellConvertor.cs" />
+    <Compile Include="Logic\Convertors\TableConvertor.cs" />
+    <Compile Include="Logic\Convertors\IConvertor.cs" />
     <Compile Include="Logic\Services\GeneratePotentialService.cs" />
-    <Compile Include="Logic\Services\Methods\IInitialRefPlanBuilder.cs" />
-    <Compile Include="Logic\Services\Methods\IPlanUpgrader.cs" />
-    <Compile Include="Logic\Services\Methods\MinElementsMethod.cs" />
-    <Compile Include="Logic\Services\Methods\PotentialMethod.cs" />
+    <Compile Include="Logic\Methods\IInitialRefPlanBuilder.cs" />
+    <Compile Include="Logic\Methods\IPlanUpgrader.cs" />
+    <Compile Include="Logic\Methods\MinElementsMethod.cs" />
+    <Compile Include="Logic\Methods\PotentialMethod.cs" />
     <Compile Include="Views\PrepTableGenerator.cs" />
     <Compile Include="Views\PrepTablePage.xaml.cs">
       <DependentUpon>PrepTablePage.xaml</DependentUpon>
@@ -139,6 +139,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\ToPdf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OptimizationMethodsAndOperationsResearch\OptimizationMethodsAndOperationsResearch.csproj">
+      <Project>{EFF1B999-F1B7-48DD-BF0F-4BFEAB764D3A}</Project>
+      <Name>OptimizationMethodsAndOperationsResearch</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

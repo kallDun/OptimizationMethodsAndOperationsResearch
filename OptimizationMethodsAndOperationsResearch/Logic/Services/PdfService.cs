@@ -8,7 +8,7 @@ using System.Windows.Xps.Packaging;
 
 namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 {
-    static class PdfService
+    public static class PdfService
     {
         public static void SaveToPdf(IEnumerable<Page> pages)
         {

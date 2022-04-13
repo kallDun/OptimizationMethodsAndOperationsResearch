@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -7,10 +6,10 @@ using TransportTask.Logic.Models;
 
 namespace TransportTask.Views
 {
-    static class PrepTableGenerator
-    {
-        public delegate PrepTable GetPrepTableDelegate();
+    public delegate PrepTable GetPrepTableDelegate();
 
+    static class PrepTableGenerator
+    {   
         class TextBoxes
         {
             public TextBox center;
@@ -297,9 +296,33 @@ namespace TransportTask.Views
 
             var return_table = new GetPrepTableDelegate(() =>
             {
-                /*var table_ = new PrepTable(cells, reserves, need);
-                return table_;*/
-                return null;
+                var textboxes = tableDesign.text_boxes;
+                var rows = textboxes.Length;
+                var cols = textboxes[0].Length;
+
+                var cells = new PrepCell[rows - 3][];
+                for (int i = 0; i < cells.Length; i++) cells[i] = new PrepCell[cols - 2];
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    for (int j = 0; j < cells[i].Length; j++)
+                    {
+                        cells[i][j] = int.Parse(textboxes[i + 2][j + 1].center.Text);
+                    }
+                }
+
+                var reserves = new int[rows - 3];
+                for (int i = 0; i < reserves.Length; i++)
+                {
+                    reserves[i] = int.Parse(textboxes[i + 2][cols - 1].center.Text);
+                }
+                var need = new int[cols - 2];
+                for (int j = 0; j < need.Length; j++)
+                {
+                    need[j] = int.Parse(textboxes[rows - 1][j + 1].center.Text);
+                }
+
+                var table_ = new PrepTable(cells, reserves, need);
+                return table_;
             });
 
             return (main_grid, return_table);
@@ -328,7 +351,6 @@ namespace TransportTask.Views
             Grid.SetRow(background, i);
             Grid.SetColumn(background, j);
         }
-
         private static Button GenerateButton(string text)
         {
             return new Button

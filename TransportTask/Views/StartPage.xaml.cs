@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using TransportTask.Logic.Models;
+using static TransportTask.Views.PrepTableGenerator;
 
 namespace TransportTask.Views
 {
@@ -9,11 +9,15 @@ namespace TransportTask.Views
     /// </summary>
     public partial class StartPage : Page
     {
+        public GetPrepTableDelegate GetTable { get; private set; }
+
         public StartPage()
         {
             InitializeComponent();
-            var (grid, deleg) = PrepTableGenerator.InitReturnTable(GetPrepTablePreview());
+            var (grid, deleg) = InitReturnTable(GetPrepTablePreview());
             MainGrid.Children.Add(grid);
+            Grid.SetRow(grid, 1);
+            GetTable = deleg;
         }
 
         private PrepTable GetPrepTablePreview()

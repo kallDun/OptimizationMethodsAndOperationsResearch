@@ -5,16 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TransportTask"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="530" Width="800">
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="TextBoxTableStyle">
+            <Setter Property="FontFamily" Value="DejaVu Sans"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-        <Frame x:Name="PageFrame" NavigationUIVisibility="Hidden"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TextBoxTableStyle}" Text="" x:Name="PageCounterTextBlock"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="50" x:Name="SolvePanel">
+            <Button Width="180" x:Name="SolveButton" Click="SolveButton_Click" Background="Transparent" BorderThickness="2" BorderBrush="Black">
+                <TextBlock Text="Solve Task" Style="{StaticResource TextBoxTableStyle}"/>
+            </Button>
+            <Button Width="50" Margin="10 0 0 0" x:Name="ToPdfButton" Click="ToPdfButton_Click" Background="Transparent" BorderThickness="2" BorderBrush="Black">
+                <Image Source="pack://application:,,,/Images/ToPdf.png"/>
+            </Button>
+        </StackPanel>
+        <Frame x:Name="PageFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
         <Button Width="35" Height="35" Background="Transparent" BorderBrush="Black" BorderThickness="2"
-                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15"
+                HorizontalAlignment="Right" Margin="15 0" VerticalAlignment="Center"
                 Click="ToRightButton_Click"  x:Name="ToRightButton" IsEnabled="False">
             <TextBlock Text=">" FontSize="23" FontFamily="DejaVu Sans"/>
         </Button>
         <Button Width="35" Height="35" Background="Transparent" BorderBrush="Black" BorderThickness="2"
-                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15"
+                HorizontalAlignment="Left" Margin="15 0" VerticalAlignment="Center"
                 Click="ToLeftButton_Click"  x:Name="ToLeftButton" IsEnabled="False">
             <TextBlock Text="&lt;" FontSize="23" FontFamily="DejaVu Sans"/>
         </Button>
