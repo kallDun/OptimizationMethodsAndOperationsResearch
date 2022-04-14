@@ -15,7 +15,7 @@ namespace TransportTask
 {
     public partial class MainWindow : Window
     {
-        List<Page> pages = new List<Page>();
+        List<Page> pages = new();
         StartPage startPage;
         int page_index = 0;
 
@@ -40,8 +40,8 @@ namespace TransportTask
                 var current_prep_table = new ConditionOfExistingService().Check(start_table);
                 pages.Add(new PrepTablePage(current_prep_table));
 
-                IInitialRefPlanBuilder refPlanBuilder = new LeftUpperCornerMethod();
-                //IInitialRefPlanBuilder refPlanBuilder = new MinElementsMethod();
+                //IInitialRefPlanBuilder refPlanBuilder = new LeftUpperCornerMethod();
+                IInitialRefPlanBuilder refPlanBuilder = new MinElementsMethod();
                 while (!refPlanBuilder.IsBuilt(current_prep_table))
                 {
                     current_prep_table = refPlanBuilder.Build(current_prep_table);

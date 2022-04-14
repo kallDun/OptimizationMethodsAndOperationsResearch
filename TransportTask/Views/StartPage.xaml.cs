@@ -14,7 +14,7 @@ namespace TransportTask.Views
         public StartPage()
         {
             InitializeComponent();
-            var (grid, deleg) = InitReturnTable(GetPrepTablePreview());
+            var (grid, deleg) = InitReturnPrepTable(GetVariantPrepTable());
             MainGrid.Children.Add(grid);
             Grid.SetRow(grid, 1);
             GetTable = deleg;
@@ -24,12 +24,12 @@ namespace TransportTask.Views
         {
             var cells = new PrepCell[][]
             {
-                new PrepCell[] { 7, 6, 3 },
-                new PrepCell[] { 2, 5, 4 },
-                new PrepCell[] { 9, 10, 11 },
+                new PrepCell[] { 11, 10, 7 },
+                new PrepCell[] { 8, 5, 4 },
+                new PrepCell[] { 4, 3, 14 },
             };
-            var reserves = new int[] { 175, 225, 230 };
-            var need = new int[] { 205, 200, 250 };
+            var reserves = new int[] { 200, 190, 300 };
+            var need = new int[] { 400, 250, 170 };
 
             PrepTable table = new(cells, reserves, need);
             return table;

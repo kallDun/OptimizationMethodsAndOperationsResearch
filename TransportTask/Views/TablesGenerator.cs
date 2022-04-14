@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using TransportTask.Logic.Models;
 
 namespace TransportTask.Views
@@ -174,10 +175,10 @@ namespace TransportTask.Views
 
         public static Grid InitPrepReadonlyTable(PrepTable table)
         {
-            var (grid, del) = InitReturnTable(table, true);
+            var (grid, del) = InitReturnPrepTable(table, true);
             return grid;
         }
-        public static (Grid, GetPrepTableDelegate) InitReturnTable(PrepTable table, bool IsReadonly = false)
+        public static (Grid, GetPrepTableDelegate) InitReturnPrepTable(PrepTable table, bool IsReadonly = false)
         {
             GenerateGrid(table.Reserves.Length, table.Need.Length, draw_last_row_col: true, 
                 out Grid main_grid, out int rows, out int cols, out TableDesign tableDesign);
@@ -318,6 +319,39 @@ namespace TransportTask.Views
                         item.right_top.BorderBrush = Brushes.Black;
                     }
                 }
+            }
+
+            if (table.Cycle.IsVisible)
+            {
+                foreach (var item in table.Cycle.Vertices)
+                {
+                    var i = item.Point.I + 2;
+                    var j = item.Point.J + 1;
+
+                    var element = new Ellipse()
+                    {
+                        Width = 25,
+                        Height = 25,
+                        Stroke = Brushes.Black,
+                        StrokeThickness = 1.2
+                    };
+                    if (table.Cycle.SelectedMinimumVertex.Point.CompareTo(item.Point) == 0)
+                    {
+                        element.Stroke = Brushes.DarkRed;
+                        element.StrokeThickness = 2;
+                    }
+
+                    if (table.Cycle.StartVertex.CompareTo(item.Point) == 0)
+                    {
+                        element.Fill = Brushes.DarkRed;
+                    }
+                    else
+                    {
+                        tableDesign.text_boxes[i][j].center.Text = item.NegativeSign ? "-" : "+";
+                    }                    
+
+                    tableDesign.background_boxes[i][j].Children.Add(element);
+                }                
             }
 
             return main_grid;
