@@ -12,10 +12,12 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
     {
         public static void SaveToPdf(IEnumerable<Page> pages)
         {
-            var dialog = new SaveFileDialog();
-            dialog.AddExtension = true;
-            dialog.DefaultExt = "pdf";
-            dialog.Filter = "PDF Document (*.pdf)|*.pdf";
+            var dialog = new SaveFileDialog
+            {
+                AddExtension = true,
+                DefaultExt = "pdf",
+                Filter = "PDF Document (*.pdf)|*.pdf"
+            };
             if (dialog.ShowDialog() == false) return;
 
             List<KeyValuePair<Page, Panel>> pages_contents = new();
