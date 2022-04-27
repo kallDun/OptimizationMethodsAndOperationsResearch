@@ -79,9 +79,14 @@
     <Compile Include="Logic\Models\SumValue.cs" />
     <Compile Include="Logic\Models\Table.cs" />
     <Compile Include="Logic\Models\VisualDataModel.cs" />
-    <Compile Include="Logic\Services\FunctionParser.cs" />
-    <Compile Include="Logic\Services\PdfService.cs" />
-    <Compile Include="Logic\Services\SimplexMethodCalculator.cs" />
+    <Compile Include="Logic\Services\AbstractSimplexMethod.cs" />
+    <Compile Include="Logic\Services\FractionMethod\DoubleSimplexMethod.cs" />
+    <Compile Include="Logic\Services\IntegerMethod\GomorisMethodService.cs" />
+    <Compile Include="Logic\Utilities\FunctionParser.cs" />
+    <Compile Include="Logic\Services\SimplexMethodType.cs" />
+    <Compile Include="Logic\Utilities\PdfService.cs" />
+    <Compile Include="Logic\Services\FractionMethod\BasicSimplexMethod.cs" />
+    <Compile Include="Logic\Utilities\TableUtility.cs" />
     <Compile Include="Views\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>

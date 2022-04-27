@@ -27,16 +27,28 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 15" Orientation="Horizontal"
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" 
                     VerticalAlignment="Center" HorizontalAlignment="Center">
-           <Button x:Name="SolveButton" Margin="2 0 60 0" Width="200px"
+            <Grid Width="40" x:Name="MethodsButtonsGrid">
+                <StackPanel Orientation="Horizontal" Height="20" VerticalAlignment="Top">
+                    <TextBlock Width="20" Text="F" FontSize="14" Style="{StaticResource TextBoxTableStyle}"/>
+                    <Button Width="20" Background="Black" BorderThickness="2" BorderBrush="Black" 
+                            Tag="Fraction" Click="ChangeMethod_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="20" VerticalAlignment="Bottom">
+                    <TextBlock Width="20" Text="I" FontSize="14" Style="{StaticResource TextBoxTableStyle}"/>
+                    <Button Width="20" Background="Transparent" BorderThickness="2" BorderBrush="Black" 
+                            Tag="Integer" Click="ChangeMethod_Click"/>
+                </StackPanel>
+            </Grid>
+            <Button x:Name="SolveButton" Margin="4 0 0 0" Width="160px"
                 Background="Transparent" BorderThickness="2" BorderBrush="Black">
-                <TextBlock Text="Solve Func" Style="{StaticResource TextBoxTableStyle}"/>
-            </Button>
-            <Button HorizontalAlignment="Right" Margin="-54 0 0 0" x:Name="ToPdfButton"
+                <TextBlock Text="Solve Func" Style="{StaticResource TextBoxTableStyle}" HorizontalAlignment="Left" Margin="10 0"/>
+            </Button>            
+            <Button Margin="4 0 0 0" x:Name="ToPdfButton"
                     Width="54" BorderThickness="2" BorderBrush="Black" Background="Transparent">
                 <Image Source="pack://application:,,,/Images/ToPdf.png"/>
-            </Button>
+            </Button>            
         </StackPanel>
         <TextBox Grid.ColumnSpan="3" Margin="20 0" Background="Transparent"
                  BorderThickness="2, 0, 0, 0" BorderBrush="Black" FontSize="24" FontFamily="DejaVu Sans"

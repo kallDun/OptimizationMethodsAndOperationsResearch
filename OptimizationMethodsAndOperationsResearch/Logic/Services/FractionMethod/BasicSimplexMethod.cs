@@ -1,16 +1,13 @@
 ﻿using Fractions;
 using OptimizationMethodsAndOperationsResearch.Logic.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OptimizationMethodsAndOperationsResearch.Logic.Services
 {
-    class SimplexMethodCalculator
+    class BasicSimplexMethod : AbstractSimplexMethod
     {
-        public bool HasSolution { get; private set; } = true;
-
-        public bool IsOptimizated(Table table)
+        public override bool IsOptimized(Table table)
         {
             if (HasSolutions(table))
             {
@@ -49,7 +46,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             return true;
         }
         
-        public (Table, VisualDataModel) GetNextTable(Table table)
+        public override (Table, VisualDataModel) GetNextTable(Table table)
         {
             int indexOfInputingVector = GetIndexOfInputingVector(table);
             int indexOfDeletingVector = GetIndexOfDeletingVector(table, indexOfInputingVector);
@@ -91,27 +88,6 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             ChangeHasBigNumbers(newTable);
             return (newTable, visualData);
         }
-
-        public Dictionary<int, Fraction> GetResults(Table table)
-        {
-            Dictionary<int, Fraction> results = new Dictionary<int, Fraction>();
-            for (int i = 0; i < table.RowBasises.Length; i++)
-            {
-                results.Add(i + 1, 0);
-            }
-            for (int i = 0; i < table.RowBasises.Length; i++)
-            {
-                for (int j = 0; j < table.ColumnBasises.Length; j++)
-                {
-                    if (table.ColumnBasises[j].Index == i + 1)
-                    {
-                        results[i + 1] = table.Matrix[j][0];
-                    }
-                }
-            }
-            return results;
-        }
-
         private int GetIndexOfInputingVector(Table table)
         {
             var founded = GetLastRowValues(table).Min();

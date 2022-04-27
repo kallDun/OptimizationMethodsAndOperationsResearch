@@ -1,35 +1,25 @@
-﻿using Fractions;
-using OptimizationMethodsAndOperationsResearch.Logic.Models;
+﻿using OptimizationMethodsAndOperationsResearch.Logic.Models;
 using OptimizationMethodsAndOperationsResearch.Logic.Services;
+using OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod;
+using OptimizationMethodsAndOperationsResearch.Logic.Utilities;
 using OptimizationMethodsAndOperationsResearch.Views;
-using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OptimizationMethodsAndOperationsResearch
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        List<Page> pages = new List<Page>();
+        List<Page> pages = new();
         int page_index = 0;
 
         public MainWindow()
         {
-            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             InitializeComponent();
             var start_page = new StartPage();
             PageFrame.Content = start_page;
@@ -43,15 +33,33 @@ namespace OptimizationMethodsAndOperationsResearch
             pages.Clear();
             pages.Add(page);
 
-            var (func, matrix) = page.GetFunctionData;
-            var curr_table = new FunctionParser().ToTable(func, matrix);
-            pages.Add(new TablePage(curr_table));
-            var simplex_calculator = new SimplexMethodCalculator();
-
-            var counter = 0;
-            while (!simplex_calculator.IsOptimizated(curr_table) && counter < 1000)
+            var methodType = page.simplexMethodType;
+            if (methodType is SimplexMethodType.Fraction)
             {
-                var prev_table = curr_table.Clone() as Table;
+                CalcSimplexMethod(page);
+            }
+            else if (methodType is SimplexMethodType.Integer)
+            {
+                Table table = CalcSimplexMethod(page);
+                if (table is not null) CalcIntegerMethod(page, table);
+            }            
+
+            ToLeftButton.IsEnabled = true;
+            ToRightButton.IsEnabled = true;
+        }
+
+        private Table CalcSimplexMethod(StartPage page)
+        {
+            Table curr_table, prev_table;
+            var (func, matrix) = page.GetFunctionData;
+            curr_table = new FunctionParser().ToTable(func, matrix);
+            pages.Add(new TablePage(curr_table));
+
+            AbstractSimplexMethod simplex_calculator = new BasicSimplexMethod();
+            var counter = 0;
+            while (!simplex_calculator.IsOptimized(curr_table) && counter < 1000)
+            {
+                prev_table = curr_table.Clone() as Table;
                 VisualDataModel data;
                 (curr_table, data) = simplex_calculator.GetNextTable(curr_table);
                 prev_table.VisualData = data;
@@ -63,14 +71,43 @@ namespace OptimizationMethodsAndOperationsResearch
             {
                 var results = simplex_calculator.GetResults(curr_table);
                 page.OutputTextBox.Text = string.Join("  ", results.Select(x => $"x{x.Key} = {x.Value}"));
+                return curr_table;
+            }
+            else
+            {
+                page.OutputTextBox.Text = "No Solutions";
+                return null;
+            }
+        }
+        private void CalcIntegerMethod(StartPage page, Table table)
+        {
+            table = TableUtility.GetWithoutMajorColumn(table);
+            pages.Add(new TablePage(table));
+
+            Table prev_table;
+            GomorisMethodService gomoriService = new();
+            AbstractSimplexMethod simplex_calculator = new BasicSimplexMethod(); // todo change !!!!!!!!!!!!!!!!!!!! need to change !!!!!!!!!!!!!!!!!!!!!!!!!! change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            var counter = 0;
+            while (!simplex_calculator.IsOptimized(table) && counter < 1000)
+            {
+                table = gomoriService.GomorisMethod(table);
+                pages.Add(new TablePage(table));
+                prev_table = table.Clone() as Table;
+                VisualDataModel data;
+                (table, data) = simplex_calculator.GetNextTable(table);
+                pages.Add(new TablePage(prev_table));
+                pages.Add(new TablePage(table));
+                counter++;
+            }
+            if (simplex_calculator.HasSolution)
+            {
+                var results = simplex_calculator.GetResults(table);
+                page.OutputTextBox.Text = string.Join("  ", results.Select(x => $"x{x.Key} = {x.Value}"));
             }
             else
             {
                 page.OutputTextBox.Text = "No Solutions";
             }
-
-            ToLeftButton.IsEnabled = true;
-            ToRightButton.IsEnabled = true;
         }
 
         private void RightButton_Click(object sender, RoutedEventArgs e)

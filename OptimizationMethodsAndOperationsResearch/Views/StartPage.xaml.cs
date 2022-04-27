@@ -1,12 +1,13 @@
-﻿using System.Windows.Controls;
+﻿using OptimizationMethodsAndOperationsResearch.Logic.Services;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace OptimizationMethodsAndOperationsResearch.Views
 {
-    /// <summary>
-    /// Interaction logic for StartPage.xaml
-    /// </summary>
     public partial class StartPage : Page
     {
+        public SimplexMethodType simplexMethodType { get; private set; } = SimplexMethodType.Fraction;
         public StartPage()
         {
             InitializeComponent();
@@ -24,5 +25,21 @@ namespace OptimizationMethodsAndOperationsResearch.Views
                 "x1 >= 0, x2 >= 0";*/
         }
         public (string, string) GetFunctionData => (InputFuncTextBox.Text, InputMatrixTextBox.Text);
+
+        private void ChangeMethod_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            simplexMethodType = button.Tag switch
+            {
+                "Fraction" => SimplexMethodType.Fraction,
+                "Integer" => SimplexMethodType.Integer,
+                _ => SimplexMethodType.Fraction
+            };
+            foreach (var item in MethodsButtonsGrid.Children.Cast<object>().Where(x => x is Button).Select(x => x as Button))
+            {
+                item.Background = Brushes.Transparent;
+            }
+            button.Background = Brushes.Black;
+        }
     }
 }
