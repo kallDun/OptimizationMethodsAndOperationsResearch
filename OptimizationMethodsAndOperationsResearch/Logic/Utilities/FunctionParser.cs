@@ -61,6 +61,10 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                 rowBasises[i] = i + 1 < GetElementsInRow(2, equations_count) ? new Basis(i + 1, new SumValue(C[i], 0)) : new Basis(i + 1, new SumValue(0, if_min ? 1 : -1));
                 if (i + 1 >= GetElementsInRow(2, equations_count)) has_big_num = true;
             }
+            for (int i = 0; i < 2; i++) // make basises 1 & 2 start variable
+            {
+                rowBasises[i].IsStartVariable = true;
+            }
             var temp_basises = new List<Basis>();
             foreach (var basis in rowBasises)
             {
@@ -78,7 +82,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
                     }
                 }
             }
-            return new Table(matrix, columnBasises, rowBasises, BasicSimplexMethod.GenerateLastRow(matrix, columnBasises, rowBasises), if_min, has_big_num);
+            return new Table(matrix, columnBasises, rowBasises, AbstractSimplexMethod.GenerateLastRow(matrix, columnBasises, rowBasises), if_min, has_big_num);
         }
         private Fraction GetSimpleBasisResult(Fraction[][] matrix, int index)
         {

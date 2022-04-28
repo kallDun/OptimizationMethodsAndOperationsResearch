@@ -54,7 +54,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.FractionMethod
         {
             return table.Matrix
                 .Select(P => P[0])
-                .Select((x, i) => new { item = x, index = i })
+                .Select((x, i) => (item: x, index: i))
                 .OrderBy(x => x.item)
                 .First()
                 .index;

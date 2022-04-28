@@ -73,7 +73,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod
             for (int i = 0; i < table.Matrix.Length; i++)
             {
                 Fraction fraction = GetFractionalPart(table.Matrix[i][0]);
-                if (!fraction.IsZero)
+                if (!fraction.IsZero && table.ColumnBasises[i].IsStartVariable)
                 {
                     return i;
                 }
@@ -81,6 +81,5 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod
             AllResultElemIsInteger = true;
             return 0;
         }
-
     }
 }
