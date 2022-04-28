@@ -29,16 +29,18 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" 
                     VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Grid Width="40" x:Name="MethodsButtonsGrid">
+            <Grid Width="40">
                 <StackPanel Orientation="Horizontal" Height="20" VerticalAlignment="Top">
-                    <TextBlock Width="20" Text="F" FontSize="14" Style="{StaticResource TextBoxTableStyle}"/>
+                    <TextBlock Width="20" Text="F" FontSize="16" Style="{StaticResource TextBoxTableStyle}"
+                               FontWeight="Bold"/>
                     <Button Width="20" Background="Black" BorderThickness="2" BorderBrush="Black" 
-                            Tag="Fraction" Click="ChangeMethod_Click"/>
+                            Tag="Fraction" Click="ChangeMethod_Click" x:Name="FractionMethodButton"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Height="20" VerticalAlignment="Bottom">
-                    <TextBlock Width="20" Text="I" FontSize="14" Style="{StaticResource TextBoxTableStyle}"/>
+                    <TextBlock Width="20" Text="I" FontSize="16" Style="{StaticResource TextBoxTableStyle}"
+                               FontWeight="Bold"/>
                     <Button Width="20" Background="Transparent" BorderThickness="2" BorderBrush="Black" 
-                            Tag="Integer" Click="ChangeMethod_Click"/>
+                            Tag="Integer" Click="ChangeMethod_Click" x:Name="IntegerMethodButton"/>
                 </StackPanel>
             </Grid>
             <Button x:Name="SolveButton" Margin="4 0 0 0" Width="160px"

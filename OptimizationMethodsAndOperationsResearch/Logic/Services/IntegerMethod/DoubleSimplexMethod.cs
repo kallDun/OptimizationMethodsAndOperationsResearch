@@ -20,9 +20,9 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.FractionMethod
         }
         private bool HasSolutions(Table table)
         {
-            return table.Matrix
+            return !table.Matrix
                 .Select(P => P[0])
-                .Select((x, i) => new { item = x, index = i })
+                .Select((x, i) => (item: x, index: i))
                 .Any(x => x.item < 0 && !table.Matrix[x.index].Any(s => s < 0));
         }
 
@@ -37,6 +37,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.FractionMethod
         }
         private Fraction GetFractionalPart(Fraction fraction)
         {
+            if (fraction == 0) return 0;
             return new Fraction(fraction.Numerator % fraction.Denominator, fraction.Denominator);
         }
 
@@ -60,12 +61,13 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.FractionMethod
         }
         private int GetIndexOfInputingCol(Table table, int indexOfInputingRow)
         {
-            var last_row = GetLastRowValues(table).ToList();
-            return table.Matrix
-                .Select(P => P[indexOfInputingRow])
-                .Select((x, i) => new { item = (x / last_row[i]).Abs(), index = i })
-                .OrderBy(x => x.item)
-                .First()
+            var last_row = table.LastRow.Select(x => x.ValueNumber).ToList();
+            return table.Matrix[indexOfInputingRow]                                         // get need row
+                .Select((x, i) => (item: x, index: i))
+                .Where(x => x.item < 0)                                                     // select items < 0
+                .Select(x => (item: (last_row[x.index] / x.item).Abs(), index: x.index))    // divide delta on item and get abs
+                .OrderBy(x => x.item)                                                       // get minimum
+                .First(x => x.index is not 0)
                 .index;
         }
     }

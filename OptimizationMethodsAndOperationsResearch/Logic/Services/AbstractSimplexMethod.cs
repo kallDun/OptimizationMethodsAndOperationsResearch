@@ -12,7 +12,7 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
         public abstract (Table, VisualDataModel) GetNextTable(Table table);
         public Dictionary<int, Fraction> GetResults(Table table)
         {
-            Dictionary<int, Fraction> results = new();
+            Dictionary<int, Fraction> results = new Dictionary<int, Fraction>();
             for (int i = 0; i < table.RowBasises.Length; i++)
             {
                 results.Add(i + 1, 0);

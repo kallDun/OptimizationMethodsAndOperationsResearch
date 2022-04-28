@@ -80,7 +80,7 @@
     <Compile Include="Logic\Models\Table.cs" />
     <Compile Include="Logic\Models\VisualDataModel.cs" />
     <Compile Include="Logic\Services\AbstractSimplexMethod.cs" />
-    <Compile Include="Logic\Services\FractionMethod\DoubleSimplexMethod.cs" />
+    <Compile Include="Logic\Services\IntegerMethod\DoubleSimplexMethod.cs" />
     <Compile Include="Logic\Services\IntegerMethod\GomorisMethodService.cs" />
     <Compile Include="Logic\Utilities\FunctionParser.cs" />
     <Compile Include="Logic\Services\SimplexMethodType.cs" />

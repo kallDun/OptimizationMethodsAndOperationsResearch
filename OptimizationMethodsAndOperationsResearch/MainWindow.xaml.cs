@@ -1,5 +1,6 @@
 ﻿using OptimizationMethodsAndOperationsResearch.Logic.Models;
 using OptimizationMethodsAndOperationsResearch.Logic.Services;
+using OptimizationMethodsAndOperationsResearch.Logic.Services.FractionMethod;
 using OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod;
 using OptimizationMethodsAndOperationsResearch.Logic.Utilities;
 using OptimizationMethodsAndOperationsResearch.Views;
@@ -56,7 +57,7 @@ namespace OptimizationMethodsAndOperationsResearch
             pages.Add(new TablePage(curr_table));
 
             AbstractSimplexMethod simplex_calculator = new BasicSimplexMethod();
-            var counter = 0;
+            int counter = 0;
             while (!simplex_calculator.IsOptimized(curr_table) && counter < 1000)
             {
                 prev_table = curr_table.Clone() as Table;
@@ -81,24 +82,35 @@ namespace OptimizationMethodsAndOperationsResearch
         }
         private void CalcIntegerMethod(StartPage page, Table table)
         {
-            table = TableUtility.GetWithoutMajorColumn(table);
-            pages.Add(new TablePage(table));
+            if (table.HasBigNumbers)
+            {
+                table = TableUtility.GetWithoutMajorColumn(table);
+                pages.Add(new TablePage(table));
+            }            
 
             Table prev_table;
             GomorisMethodService gomoriService = new();
-            AbstractSimplexMethod simplex_calculator = new BasicSimplexMethod(); // todo change !!!!!!!!!!!!!!!!!!!! need to change !!!!!!!!!!!!!!!!!!!!!!!!!! change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            var counter = 0;
-            while (!simplex_calculator.IsOptimized(table) && counter < 1000)
+            AbstractSimplexMethod simplex_calculator = new DoubleSimplexMethod();
+
+            int counter = 0;
+            do
             {
-                table = gomoriService.GomorisMethod(table);
+                prev_table = gomoriService.GomorisMethod(table);
+                if (prev_table is null) break;
+                table = prev_table;
                 pages.Add(new TablePage(table));
+
                 prev_table = table.Clone() as Table;
                 VisualDataModel data;
                 (table, data) = simplex_calculator.GetNextTable(table);
+                prev_table.VisualData = data;
                 pages.Add(new TablePage(prev_table));
                 pages.Add(new TablePage(table));
+
                 counter++;
-            }
+            } 
+            while (!simplex_calculator.IsOptimized(table) && counter < 1000);
+
             if (simplex_calculator.HasSolution)
             {
                 var results = simplex_calculator.GetResults(table);
