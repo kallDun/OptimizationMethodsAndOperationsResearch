@@ -14,39 +14,48 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod
 
         public Table GomorisMethod(Table table)
         {
-            throw new NotImplementedException();
-            
             int notWholeResultElemIndex = GetFractionalResultElemIndex(table);
 
             if (AllResultElemIsInteger)
             {
-                return null;  
+                return null;
             }
 
             Fraction[] fractions = GetFractionalPartsOfRowElem(notWholeResultElemIndex, table);
 
-            table = ResizeTable(table)
+            table = ResizeTable(table);
+
+            for (int i = 0; i < fractions.Length; i++)
+            {
+                table.Matrix[table.Matrix.Length - 1][i] = -1 * fractions[i];
+            }
+
+            table.Matrix[table.Matrix.Length - 1][table.Matrix[0].Length - 1] = 1;
+
+            return table;
         }
 
         private Table ResizeTable(Table table)
         {
-            // scadcasdcasdcascasdcasdcasd
-            var rowBasises = ResizeArray(table.RowBasises);
-            var columnBasises = ResizeArray(table.ColumnBasises);
-            var matrix = table.Matrix;
-            var last_row = table.LastRow;
-            
-            Array.Resize(ref columnBasises, columnBasises.Length + 1);
-            Array.Resize(ref matrix, matrix.Length + 1);
+            Basis[] rowBasises = ResizeArray(table.RowBasises);
+            Basis[] columnBasises = ResizeArray(table.ColumnBasises);
+            SumValue[] last_row = ResizeArray(table.LastRow);
+            Fraction[][] matrix = ResizeMatrix(table.Matrix);
+
+            return new Table(matrix, columnBasises, rowBasises, last_row, table.IsMin, false);
+        }
+
+        private Fraction[][] ResizeMatrix(Fraction[][] matrix)
+        {
             for (int i = 0; i < matrix.Length; i++)
             {
                 Array.Resize(ref matrix[i], matrix[i].Length + 1);
             }
+            Array.Resize(ref matrix, matrix.Length + 1);
 
-            Array.Resize(ref Array[], size);
+            matrix[matrix.Length - 1] = new Fraction[matrix[0].Length];
 
-            return new Table(matrix, columnBasises, rowBasises, last_row, table.IsMin, false);
-            // dcsdvasdfasdcasdcasdcadscasd
+            return matrix;
         }
 
         private static T[] ResizeArray<T>(T[] array)
