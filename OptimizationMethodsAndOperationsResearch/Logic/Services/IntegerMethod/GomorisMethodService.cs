@@ -65,14 +65,15 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod
 
         private Fraction GetFractionalPart(Fraction fraction)
         {
-            if (fraction == 0) return 0;
+            if (fraction.IsZero) return 0;
             if (fraction.IsPositive)
             {
                 return new Fraction(fraction.Numerator % fraction.Denominator, fraction.Denominator);
             }
             else
             {
-                return new Fraction(fraction.Denominator - fraction.Numerator % fraction.Denominator, fraction.Denominator);
+                fraction = fraction.Abs();
+                return new Fraction((fraction.Denominator - fraction.Numerator) % fraction.Denominator, fraction.Denominator);
             }
         }
 

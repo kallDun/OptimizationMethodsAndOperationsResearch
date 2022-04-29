@@ -37,8 +37,16 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.FractionMethod
         }
         private Fraction GetFractionalPart(Fraction fraction)
         {
-            if (fraction == 0) return 0;
-            return new Fraction(fraction.Numerator % fraction.Denominator, fraction.Denominator);
+            if (fraction.IsZero) return 0;
+            if (fraction.IsPositive)
+            {
+                return new Fraction(fraction.Numerator % fraction.Denominator, fraction.Denominator);
+            }
+            else
+            {
+                fraction = fraction.Abs();
+                return new Fraction((fraction.Denominator - fraction.Numerator) % fraction.Denominator, fraction.Denominator);
+            }
         }
 
         public override (Table, VisualDataModel) GetNextTable(Table table)
