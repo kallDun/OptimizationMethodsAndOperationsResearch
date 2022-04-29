@@ -82,11 +82,11 @@ namespace OptimizationMethodsAndOperationsResearch
         }
         private void CalcIntegerMethod(StartPage page, Table table)
         {
-            if (table.HasBigNumbers)
+            if (AbstractSimplexMethod.HasBigNumbersInTable(table))
             {
                 table = TableUtility.GetWithoutMajorColumn(table);
                 pages.Add(new TablePage(table));
-            }            
+            }
 
             Table prev_table;
             GomorisMethodService gomoriService = new();

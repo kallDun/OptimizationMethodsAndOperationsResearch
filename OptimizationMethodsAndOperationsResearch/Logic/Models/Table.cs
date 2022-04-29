@@ -34,6 +34,8 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
             ColumnBasises.Select(x => x.Clone() as Basis).ToArray(),
             RowBasises.Select(x => x.Clone() as Basis).ToArray(),
             LastRow.ToArray(), IsMin, HasBigNumbers)
-        { VisualData = new() };
+        { 
+            VisualData = new() 
+        };
     }
 }

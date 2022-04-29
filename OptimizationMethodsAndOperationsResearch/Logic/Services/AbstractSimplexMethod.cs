@@ -29,6 +29,10 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services
             }
             return results;
         }
+        public static bool HasBigNumbersInTable(Table table)
+        {
+            return table.RowBasises.Any(x => x.SumValue.HasBigNum);
+        }
 
         public static void ChangeHasBigNumbers(Table table)
         {

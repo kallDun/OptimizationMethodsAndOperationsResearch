@@ -12,6 +12,8 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Models
         public int Index { get; set; }
         public SumValue SumValue { get; set; }
 
-        public object Clone() => new Basis(Index, SumValue);
+        public bool IsStartVariable { get; set; }
+
+        public object Clone() => new Basis(Index, SumValue) { IsStartVariable = IsStartVariable };
     }
 }
