@@ -62,10 +62,18 @@ namespace OptimizationMethodsAndOperationsResearch.Logic.Services.IntegerMethod
             Fraction[] fractions = new Fraction[table.Matrix[0].Length];
             return fractions.Select((x, index) => GetFractionalPart(table.Matrix[notWholeResultElemIndex][index])).ToArray();
         }
+
         private Fraction GetFractionalPart(Fraction fraction)
         {
             if (fraction == 0) return 0;
-            return new Fraction(fraction.Numerator % fraction.Denominator, fraction.Denominator);
+            if (fraction.IsPositive)
+            {
+                return new Fraction(fraction.Numerator % fraction.Denominator, fraction.Denominator);
+            }
+            else
+            {
+                return new Fraction(fraction.Denominator - fraction.Numerator % fraction.Denominator, fraction.Denominator);
+            }
         }
 
         private int GetFractionalResultElemIndex(Table table)
