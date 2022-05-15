@@ -1,18 +1,31 @@
 ﻿using FindFunctionExtreme.Logic;
+using FindFunctionExtreme.Logic.ExtremumMethods;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace FindFunctionExtreme
 {
     public partial class MainWindow : Window
     {
+        ExtremumResult calculation_result;
+
         public MainWindow()
         {
             InitializeComponent();
-
+            SetMaterialDesignColor();
+            InitializeMethodsComboBox();
+        }
+        private void InitializeMethodsComboBox()
+        {
+            MethodComboBox.ItemsSource = Enum.GetNames(typeof(ExtremumMethodTypes)).Select(x => new ComboBoxItem() { Content = x });
+            MethodComboBox.SelectedIndex = 0;
+        }
+        private static void SetMaterialDesignColor()
+        {
             PaletteHelper helper = new PaletteHelper();
             ITheme theme = helper.GetTheme();
             theme.SetPrimaryColor(Colors.MidnightBlue);
@@ -45,12 +58,20 @@ namespace FindFunctionExtreme
                     throw new Exception("Variables and zero vector must be one length!");
                 }
 
-                CustomFunc func = new CustomFunc(function, variables);
-                IExtremumCalculator extremumCalculator = new FastestDescentMethod();
-                double[] result = extremumCalculator.GetExtremum(func, zero_vector, epsilon);
+                ExtremumMethodTypes methodType = (ExtremumMethodTypes)Enum.Parse(typeof(ExtremumMethodTypes), (MethodComboBox.SelectedItem as ComboBoxItem).Content.ToString());
+
+                CustomFunc func = new(function, variables);
+                IExtremumCalculator extremumCalculator = methodType switch
+                {
+                    ExtremumMethodTypes.FastestDescent => new FastestDescentMethod(),
+                    ExtremumMethodTypes.DivideStep => new DivideStepMethod(),
+                    ExtremumMethodTypes.CoordinateDescent => new CoordinateDescentMethod(),
+                    _ => throw new NotImplementedException(),
+                };
+                calculation_result = extremumCalculator.GetExtremum(func, zero_vector, epsilon);
 
                 int signs_count = (int)Math.Round(Math.Log(1 / epsilon, 10));
-                ResultTextBox.Text = string.Join("\n", result.Select(x => Math.Round(x, signs_count)));
+                ResultTextBox.Text = string.Join("\n", calculation_result.MinX.Select(x => Math.Round(x, signs_count)));
             }
             catch (Exception e)
             {
@@ -60,7 +81,9 @@ namespace FindFunctionExtreme
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("There is nothing here yet!");
+            if (calculation_result is null) return;
+            Window view = new ExtremumResultView(calculation_result);
+            view.Show();
         }
     }
 }

@@ -2,6 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <LangVersion>preview</LangVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D498D36B-C3AE-4C45-84FA-5877EC8BEC15}</ProjectGuid>
@@ -66,6 +67,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ExtremumResultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -74,10 +79,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExtremumResultView.xaml.cs">
+      <DependentUpon>ExtremumResultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Logic\ExtremumMethods\CoordinateDescentMethod.cs" />
+    <Compile Include="Logic\ExtremumMethods\DivideStepMethod.cs" />
+    <Compile Include="Logic\ExtremumMethods\ExtremumMethodTypes.cs" />
+    <Compile Include="Logic\ExtremumResult.cs" />
     <Compile Include="Logic\VectorExtensions.cs" />
     <Compile Include="Logic\CustomFunc.cs" />
-    <Compile Include="Logic\FastestDescentMethod.cs" />
-    <Compile Include="Logic\IExtremumCalculator.cs" />
+    <Compile Include="Logic\ExtremumMethods\FastestDescentMethod.cs" />
+    <Compile Include="Logic\ExtremumMethods\IExtremumCalculator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

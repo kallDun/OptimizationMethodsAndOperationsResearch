@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Extremum Calculator" Height="500" Width="700">
+        Title="Extremum Calculator" Height="600" Width="700">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBox Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
@@ -34,6 +34,9 @@
                 Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                 materialDesign:HintAssist.Hint="Epsilon" FontSize="18" 
                 Text="1e-8" TextAlignment="Center" x:Name="EpsilonTextBox"/>
+
+            <ComboBox Margin="0 30 0 0" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                Width="250" materialDesign:HintAssist.Hint="Method" FontSize="18" x:Name="MethodComboBox"/>
 
             <StackPanel Margin="0 30 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
 
