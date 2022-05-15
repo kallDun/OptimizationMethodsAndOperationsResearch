@@ -1,0 +1,51 @@
+﻿<Window x:Class="FindFunctionExtreme.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FindFunctionExtreme"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Extremum Calculator" Height="500" Width="700">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBox Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     materialDesign:HintAssist.Hint="Variables" FontSize="18"
+                     Text="x1, x2" TextAlignment="Center" x:Name="VariablesTextBox"/>
+            
+            <TextBox Margin="0 30 0 0"
+                Width="500" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                materialDesign:HintAssist.Hint="Function" FontSize="18" x:Name="FunctionTextBox"
+                Text="f = x1^2 - 2x1*x2 + 3x2^2 + x1 - 4x2" TextAlignment="Center"/>
+
+            <TextBox Margin="0 30 0 0"
+                Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                materialDesign:HintAssist.Hint="Zero vector" FontSize="18" 
+                Text="(1; 1)" TextAlignment="Center" x:Name="ZeroVectorTextBox"/>
+
+            <TextBox Margin="0 30 0 0"
+                Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                materialDesign:HintAssist.Hint="Epsilon" FontSize="18" 
+                Text="1e-8" TextAlignment="Center" x:Name="EpsilonTextBox"/>
+
+            <StackPanel Margin="0 30 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
+
+                <Button Content="C" Height="40" Width="40" Margin="0 0 20 0" Click="CalculateButton_Click"
+                        VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                
+                <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="ResultTextBox" IsReadOnly="True"
+                     materialDesign:HintAssist.Hint="Result" FontSize="18" MinWidth="130"/>
+
+                <Button Content="?" Height="40" Width="40" Margin="20 0 0 0" Click="InfoButton_Click"
+                        VerticalAlignment="Bottom" Style="{StaticResource MaterialDesignOutlinedSecondaryButton}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

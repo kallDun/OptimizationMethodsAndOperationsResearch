@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationMethodsAndOpera
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportTask", "TransportTask\TransportTask.csproj", "{4AA9361B-83C5-4596-939C-CC1AC821D068}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindFunctionExtremum", "FindFunctionExtreme\FindFunctionExtremum.csproj", "{D498D36B-C3AE-4C45-84FA-5877EC8BEC15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4AA9361B-83C5-4596-939C-CC1AC821D068}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AA9361B-83C5-4596-939C-CC1AC821D068}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AA9361B-83C5-4596-939C-CC1AC821D068}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D498D36B-C3AE-4C45-84FA-5877EC8BEC15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D498D36B-C3AE-4C45-84FA-5877EC8BEC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D498D36B-C3AE-4C45-84FA-5877EC8BEC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D498D36B-C3AE-4C45-84FA-5877EC8BEC15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
