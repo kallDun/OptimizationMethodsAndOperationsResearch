@@ -19,11 +19,13 @@ namespace FindFunctionExtreme
             SetMaterialDesignColor();
             InitializeMethodsComboBox();
         }
+
         private void InitializeMethodsComboBox()
         {
             MethodComboBox.ItemsSource = Enum.GetNames(typeof(ExtremumMethodTypes)).Select(x => new ComboBoxItem() { Content = x });
             MethodComboBox.SelectedIndex = 0;
         }
+
         private static void SetMaterialDesignColor()
         {
             PaletteHelper helper = new PaletteHelper();
