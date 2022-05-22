@@ -12,7 +12,7 @@ namespace FindFunctionExtreme.Logic.ExtremumMethods
             timer.Start();
             ExtremumResult result = new();
 
-            double h0 = 100, l = 0.5;
+            double h0 = 10, l = 0.9;
             double[] x;
             double[] g = func.Gradient(x0);
             if (g.Norm() > epsilon)

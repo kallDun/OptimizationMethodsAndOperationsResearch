@@ -19,21 +19,32 @@
             <TextBox Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      materialDesign:HintAssist.Hint="Variables" FontSize="18"
                      Text="x1, x2" TextAlignment="Center" x:Name="VariablesTextBox"/>
-            
+
             <TextBox Margin="0 30 0 0"
                 Width="500" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                 materialDesign:HintAssist.Hint="Function" FontSize="18" x:Name="FunctionTextBox"
-                Text="f = x1^2 - 2x1*x2 + 3x2^2 + x1 - 4x2" TextAlignment="Center"/>
+                Text="f = 100(x2 - x1^2)^2 + (1 - x1)^2" TextAlignment="Center"/>
+
+            <ComboBox Margin="0 30 0 0" Width="500" Height="200" Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                <TextBox Margin="0 30 0 0"
+                    Width="500" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    materialDesign:HintAssist.Hint="Function" FontSize="18"
+                    Text="f = 100(x2 - x1^2)^2 + (1 - x1)^2" TextAlignment="Center"/>
+                <TextBox Margin="0 30 0 0"
+                    Width="500" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    materialDesign:HintAssist.Hint="Function" FontSize="18"
+                    Text="f = 100(x2 - x1^2)^2 + (1 - x1)^2" TextAlignment="Center"/>
+            </ComboBox>
 
             <TextBox Margin="0 30 0 0"
                 Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                 materialDesign:HintAssist.Hint="Zero vector" FontSize="18" 
-                Text="(1; 1)" TextAlignment="Center" x:Name="ZeroVectorTextBox"/>
+                Text="(0; 0)" TextAlignment="Center" x:Name="ZeroVectorTextBox"/>
 
             <TextBox Margin="0 30 0 0"
                 Width="250" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                 materialDesign:HintAssist.Hint="Epsilon" FontSize="18" 
-                Text="1e-8" TextAlignment="Center" x:Name="EpsilonTextBox"/>
+                Text="1e-4" TextAlignment="Center" x:Name="EpsilonTextBox"/>
 
             <ComboBox Margin="0 30 0 0" Style="{StaticResource MaterialDesignOutlinedComboBox}"
                 Width="250" materialDesign:HintAssist.Hint="Method" FontSize="18" x:Name="MethodComboBox"/>

@@ -11,7 +11,7 @@ namespace FindFunctionExtreme.Logic.ExtremumMethods
             timer.Start();
             ExtremumResult result = new();
 
-            double h0 = 100;
+            double h0 = 10;
             double[] x;
 
             double[] g = func.Gradient(x0);

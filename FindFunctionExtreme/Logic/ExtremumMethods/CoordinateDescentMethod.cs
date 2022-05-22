@@ -12,7 +12,7 @@ namespace FindFunctionExtreme.Logic.ExtremumMethods
             timer.Start();
             ExtremumResult result = new();
 
-            double h0 = 100, l = 0.5;
+            double h0 = 10, l = 0.5;
             double[] h = new double[func.GetParamsCount];
             for (int i = 0; i < func.GetParamsCount; i++)
             {
@@ -34,7 +34,7 @@ namespace FindFunctionExtreme.Logic.ExtremumMethods
                     double[] y2 = x.ToArray();
                     y2[i] -= 3 * epsilon;
                     double f1 = func.Solve(y1), f2 = func.Solve(y2);
-                    double sign = (f2 - f1) / Math.Abs(f2 - f1);
+                    double sign = f2 - f1 > 0 ? 1 : f2 < f1 ? -1 : 0;
 
                     result.FunctionCalls += 3;
 
